@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - nxnative-mirror-839 文档归档</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-primary-hover: #1d4ed8;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.68;
+        color: #1e293b;
+      }
+      .markdown-body {
+        color: #1e293b;
+      }
+      .markdown-body h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-top: 1.8rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid #e2e8f0;
+        color: #0f172a;
+        line-height: 1.25;
+      }
+      .markdown-body h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-top: 1.6rem;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+      }
+      .markdown-body h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.3rem;
+        margin-bottom: 0.6rem;
+        color: #334155;
+      }
+      .markdown-body p {
+        margin-top: 0.8rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.7;
+      }
+      .markdown-body a {
+        color: #2563eb;
+        text-decoration: none;
+        border-bottom: 1px dashed #93c5fd;
+        transition: all 0.2s ease;
+      }
+      .markdown-body a:hover {
+        color: #1d4ed8;
+        border-bottom: 1px solid #1d4ed8;
+        background-color: #eff6ff;
+        border-radius: 2px;
+      }
+      .markdown-body ul, .markdown-body ol {
+        padding-left: 1.5rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0.6rem;
+      }
+      .markdown-body ul {
+        list-style-type: disc;
+      }
+      .markdown-body ol {
+        list-style-type: decimal;
+      }
+      .markdown-body li {
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+      .markdown-body pre {
+        background-color: #0f172a;
+        color: #e2e8f0;
+        padding: 1rem 1.2rem;
+        border-radius: 0.75rem;
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .markdown-body code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875em;
+        padding: 0.15rem 0.35rem;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        border-radius: 0.35rem;
+        border: 1px solid #e2e8f0;
+      }
+      .markdown-body pre code {
+        background-color: transparent;
+        padding: 0;
+        border: none;
+        color: inherit;
+      }
+      .markdown-body blockquote {
+        margin: 1rem 0;
+        padding: 0.75rem 1.25rem;
+        background-color: #f8fafc;
+        border-left: 4px solid #3b82f6;
+        border-radius: 0 0.5rem 0.5rem 0;
+        color: #475569;
+      }
+      .markdown-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.2rem 0;
+        display: block;
+        overflow-x: auto;
+      }
+      .markdown-body th, .markdown-body td {
+        border: 1px solid #cbd5e1;
+        padding: 0.6rem 1rem;
+        text-align: left;
+      }
+      .markdown-body th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+      }
+      .markdown-body tr:nth-child(even) {
+        background-color: #f8fafc;
+      }
+      .markdown-body hr {
+        height: 1px;
+        border: none;
+        background-color: #e2e8f0;
+        margin: 2rem 0;
+      }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="../index.html" class="flex items-center gap-2 group">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform ">LM</span>
+        <span class="font-bold text-slate-900 tracking-tight text-lg group-hover:text-blue-600 transition-colors ">nxnative-mirror-839</span>
+      </a>
+      <span class="hidden md:inline-block text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono ">Pages Docs</span>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-2 text-sm">
+      <a href="../index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-50 font-medium ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>首页 (README)</span>
+      </a>
+      <a href="./index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-blue-600 bg-blue-50 font-semibold ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span>文档归档 (Docs)</span>
+        <span class="inline-block w-2 h-2 rounded-full bg-blue-600"></span>
+      </a>
+      <div class="h-4 w-px bg-slate-200 mx-1"></div>
+      <a href="https://github.com/shijiuwei/nxnative-mirror-839" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        <span class="hidden sm:inline">GitHub</span>
+      </a>
+      <a href="https://github.com/shijiuwei/nxnative-mirror-839/wiki" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="hidden sm:inline">Wiki</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+  <!-- 面包屑与顶部导航 -->
+  <header class="bg-white border-b border-slate-200 py-6 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2 font-medium">
+        <a href="../index.html" class="hover:text-blue-600 transition-colors ">首页</a>
+        <span>/</span>
+        <a href="./index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+        <span>/</span>
+        <span class="text-slate-800 font-semibold">技术文档</span>
+      </nav>
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Settings</h1>
+        <a href="./index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors ">
+          <span>&larr; 返回文档归档菜单</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体正文区域 -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 flex-1 w-full">
+    <article class="bg-white p-6 sm:p-12 rounded-2xl shadow-sm border border-slate-200">
+      <div class="markdown-body">
+        <h1>Settings</h1>
+<p>The screen before the game starts shows the settings the game supports. A setting that only matters while another is on appears under it and disappears when that one is turned off. Tap <strong>Play</strong> to start; the app remembers your choices for the next start. All settings are on one scrollable screen, under <strong>Game</strong>, <strong>Controls</strong> and <strong>Performance</strong>. Tap a menu or move a slider there; no settings page needs opening. <strong>Upscaling</strong> is in <strong>Game</strong>, beside <strong>Console mode</strong>. A Mac app shows the same settings in a <a href="#the-mac-settings-window">window of its own</a>.</p>
+<ul>
+<li><a href="#tested-defaults">Tested defaults</a></li>
+<li><a href="#game">Game</a>: <a href="#frame-rate">Frame rate</a>, <a href="#render-scale">Render scale</a>, <a href="#console-mode">Console mode</a>, <a href="#upscaling">Upscaling</a>, <a href="#game-language">Game language</a>, <a href="#frame-rate-counter">Frame-rate counter</a></li>
+<li><a href="#controls">Controls</a>: <a href="#touch-feedback">Touch feedback</a>, <a href="#game-rumble">Game rumble</a>, <a href="#rumble-strength">Rumble strength</a>, <a href="#rumble-cutoff">Rumble cutoff</a></li>
+<li><a href="#performance">Performance</a>: <a href="#frame-buffering">Frame buffering</a>, <a href="#metal-4-pipelines">Metal 4 pipelines</a>, <a href="#pipeline-prebuild">Pipeline prebuild</a>, <a href="#encode-thread">Encode thread</a>, <a href="#hold-frames-when-late">Hold frames when late</a>, <a href="#performance-hud">Performance HUD</a>, <a href="#reset-to-tested-defaults">Reset to tested defaults</a></li>
+<li><a href="#the-mac-settings-window">The Mac settings window</a>: <a href="#display-mode">Display mode</a></li>
+<li><a href="#settings-in-a-file">Settings in a file</a></li>
+</ul>
+<h2>Tested defaults</h2>
+<p>Each game comes with the settings it was tested with: its profile in this repository says, for example, that Breath of the Wild runs with Frame buffering and Metal 4 pipelines on, because that combination held a steady 60 fps on an iPhone 17 Pro Max. Those are the defaults the settings screen shows the first time.</p>
+<p>When you change a setting and tap <strong>Play</strong>, the app keeps your choice, also when a later build of the app ships other defaults. A setting you leave at its default is not stored: it follows the defaults of the build you have, so a newer build's tested settings reach you without doing anything. <strong>Reset to tested defaults</strong> at the bottom sets every setting back to its default, and <strong>Play</strong> then forgets your choices, so the game's defaults apply again. For testing, a line in <code>Documents/env.txt</code> overrides any setting (<a href="#settings-in-a-file">Settings in a file</a>).</p>
+<p>A Mac app carries the same list (<code>Contents/Resources/dm/launcher.json</code>), without the iPhone's own Frame-rate counter and Touch feedback, for a front end that starts the app with the chosen values (<a href="frontends.md">Front ends</a>).</p>
+<h2>Game</h2>
+<h3>Frame rate</h3>
+<p>Games whose speed the app controls (Breath of the Wild, Tears of the Kingdom and a few others) offer <strong>30 fps</strong> or <strong>60 fps</strong>. 60 is smoother; 30 is what the Switch ran and uses less power, so the phone stays cooler and the battery lasts longer. The game runs at real speed either way.</p>
+<h3>Render scale</h3>
+<p>The size of the 3D picture, from 50 to 100 %. Below 100 % the size is fixed there and the game's own dynamic resolution is off; 100 % keeps the game's own. Lower can be lighter on the GPU but is blurrier; the HUD and text keep their sharpness. Only games the app can scale offer it.</p>
+<h3>Console mode</h3>
+<p><strong>Docked</strong> renders at the Switch's TV resolution, <strong>Handheld</strong> at its lower handheld resolution, which is lighter on the phone and can give a higher frame rate.</p>
+<h3>Upscaling</h3>
+<p>A game that renders below the screen's resolution is scaled up to the screen. <strong>Standard</strong>, the default, scales smoothly; <strong>MetalFX</strong> uses Apple's MetalFX upscaler, which sharpens edges and text as it scales.</p>
+<pre><code class="language-mermaid">flowchart LR
+    G["Game's picture&lt;br/&gt;handheld 1280x720&lt;br/&gt;docked 1920x1080"] --&gt; S{Upscaling}
+    S --&gt;|Standard| B["Smooth scaling"]
+    S --&gt;|MetalFX| M["MetalFX: sharper edges and text"]
+    B --&gt; D["Screen&lt;br/&gt;2868x1320 on an iPhone 17 Pro Max"]
+    M --&gt; D
+</code></pre>
+<p>Breath of the Wild renders 1280x720 in handheld mode. Docked it renders its world at 900p and scales that to 1080p itself, before the app sees the picture. MetalFX works in either mode: handheld saves the most GPU time and heat, docked looks sharper than smooth scaling. Rendering at the screen's resolution stays the sharpest picture, where the GPU can afford it.</p>
+<ul>
+<li><strong>When to change it:</strong> turn it on if the picture looks soft and the device has GPU time to spare: on a Mac, or on an iPhone in handheld mode at 30 fps. For long sessions at 60 fps on an iPhone leave it at Standard.</li>
+<li><strong>Cost:</strong> more GPU time each frame, which can increase heat on an iPhone. <a href="../dm/games/01007EF00011E000/README.md#upscaling-current">Breath of the Wild's measurements</a> cover Mac and iPhone; the matching iPhone Standard run and MetalFX's share of the thermal cost remain unmeasured. Nothing changes while the game's picture is as large as the screen. Unsupported devices and sizes use Standard scaling.</li>
+<li><strong>On the Mac:</strong> choose <strong>MetalFX</strong> under <strong>Upscaling</strong> in the <a href="#the-mac-settings-window">settings window</a>'s Advanced settings, or set <code>DM_PRESENT_UPSCALE=metalfx</code> in its <code>env.txt</code> (off by default). It helps in a large window or on a 4K screen.</li>
+</ul>
+<h3>Game language</h3>
+<p>The game's own languages. The app was packed with one of them; pick another here without repacking.</p>
+<h3>Frame-rate counter</h3>
+<p>Shows the frames per second at the top left.</p>
+<h2>Controls</h2>
+<h3>Touch feedback</h3>
+<p>A light tap from the phone when you press an on-screen button.</p>
+<h3>Game rumble</h3>
+<p>The game's vibration, on the phone or on a connected controller.</p>
+<h3>Rumble strength</h3>
+<p>How strong the game's vibration is, from 0 to 300 %.</p>
+<h3>Rumble cutoff</h3>
+<p>A controller's vibration weaker than this stays off, and the rest is spread over the full range. Off (0 %) by default. A controller with rotating motors can rumble all the time in a game that sends a quiet texture: Mario Kart 8 Deluxe needs about 45 % to rumble only on crashes and drifts. The phone's own vibration is not affected.</p>
+<h2>Performance</h2>
+<p>These settings change how the app hands frames to the screen and how it prepares the GPU's work. The game's tested defaults are a good start; change them when a game stutters, runs hot, or you want less latency.</p>
+<h3>Frame buffering</h3>
+<p>Each finished frame is copied into a buffer of two images that the screen shows from, so the game can start its next frame at once instead of waiting for the screen to give its image back.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant Game as Game (CPU)
+    participant GPU
+    participant Screen
+    Note over Game,Screen: Frame buffering off
+    Game-&gt;&gt;GPU: frame 1
+    GPU-&gt;&gt;Screen: frame 1, shown at the next refresh
+    Note over GPU: idle until the screen gives the image back
+    Screen--&gt;&gt;Game: image free again
+    Game-&gt;&gt;GPU: frame 2
+    Note over Game,Screen: Frame buffering on
+    Game-&gt;&gt;GPU: frame 1, then a copy into the buffer
+    Note over Game: image free at once
+    Game-&gt;&gt;GPU: frame 2
+    GPU-&gt;&gt;Screen: frame 1 from the buffer, at the next refresh
+    Note over GPU: keeps working: frame 2 while frame 1 is on screen
+</code></pre>
+<p>Without it the GPU idles between frames, and iOS reads that idle time as room to spare: it lowers the GPU's clock, and the frames take longer still. On an iPhone 17 Pro Max, Breath of the Wild fell to 30 fps without frame buffering and held 60 with it.</p>
+<ul>
+<li><strong>When to change it:</strong> turn it off if you notice the controls lag behind and the game holds its frame rate without it.</li>
+<li><strong>Cost:</strong> up to one frame more latency between your input and the screen (about 28 ms more on an iPhone 17 Pro Max), and two more frame-sized images in memory.</li>
+</ul>
+<h3>Metal 4 pipelines</h3>
+<p>Before the GPU can draw something, the app has to build a <em>pipeline</em> for it: the game's shaders compiled for the iPhone's GPU, with the drawing settings. Building one takes tens of milliseconds, so a scene full of new ones stutters. With Metal 4 pipelines the app keeps what it built in a pipeline archive on the phone, and builds most pipelines in a few microseconds from a shared base.</p>
+<pre><code class="language-mermaid">flowchart TD
+    start([Game starts]) --&gt; prepare["Prepare, before the first frame:&lt;br/&gt;build what the archive&lt;br/&gt;and the prewarm lists name"]
+    prepare --&gt; pre{"Prebuild done for&lt;br/&gt;this game version?"}
+    pre --&gt;|no: first start,&lt;br/&gt;game or app update| prebuild["Pipeline prebuild:&lt;br/&gt;a stand-in for every shader pair&lt;br/&gt;(Preparing pipelines, a few minutes, once)"]
+    prebuild --&gt; archive
+    pre --&gt;|yes| draw
+    draw{"A draw needs&lt;br/&gt;a pipeline"}
+    draw --&gt;|built already| ok[Draw]
+    draw --&gt;|never seen| stand{"Stand-in for its&lt;br/&gt;shader pair?"}
+    stand --&gt;|yes| hybrid["Draw with the stand-in&lt;br/&gt;(hybrid pipeline)"]
+    hybrid --&gt; bg[Build the real pipeline&lt;br/&gt;in the background]
+    stand --&gt;|no| wait["Build it now:&lt;br/&gt;the game waits, a stutter"]
+    bg --&gt; archive[(Pipeline archive&lt;br/&gt;and prewarm list)]
+    wait --&gt; archive
+    archive -.-&gt;|next start| prepare
+</code></pre>
+<p>At start, before the game's first frame, the app prepares what it already knows: the pipelines in the archive and those the prewarm lists name (one comes with the game, one grows on the phone as you play); with a warm archive that takes well under a second. A pipeline never seen before is drawn meanwhile with a stand-in for its pair of shaders, a <em>hybrid</em> pipeline that reads the draw's vertices in a general way and draws the same picture, while the real pipeline is built in the background and archived for the next start.</p>
+<ul>
+<li><strong>When to change it:</strong> turn it off only if a game crashes or runs out of memory with it.</li>
+<li><strong>Cost:</strong> memory for the archive while the game runs, and storage on the phone.</li>
+</ul>
+<h3>Pipeline prebuild</h3>
+<p>Builds a stand-in for every pair of shaders the game has (15,767 for Breath of the Wild) and puts them into the pipeline archive, so that a scene you have never seen has a stand-in for each of its draws instead of a stutter. It runs before the game's first frame, behind a <strong>Preparing pipelines</strong> screen: the first start waits a few minutes for it, once, and so does the first start after a game update or an app update that brings new shaders. Every other start skips it. It needs Metal 4 pipelines.</p>
+<p>Built in the background while playing instead, the stand-ins took an iPhone 17 Pro Max's GPU from about 13 to 15–18 ms a frame in Breath of the Wild, so the app does the work up front.</p>
+<ul>
+<li><strong>When to change it:</strong> turn it off if you don't want to wait at that first start.</li>
+<li><strong>Cost:</strong> on, a wait of a few minutes once. Off, no wait, but a pipeline seen for the first time makes the game stall briefly while it is built, until the archive holds it.</li>
+</ul>
+<h3>Encode thread</h3>
+<p>The app turns the game's graphics commands into Metal commands on a thread of its own instead of the game's submitting thread, so the game's thread can go on sooner (in Breath of the Wild about 4 ms per frame instead of 8). Frame buffering needs it for games that present their frames from another thread than the one that draws them. It is on by default on the iPhone; on the Mac it is off, where it lowered the typical frame time but made the slowest frames slower.</p>
+<ul>
+<li><strong>When to change it:</strong> leave it on unless a game misbehaves with it; turning it off is a diagnostic step.</li>
+</ul>
+<h3>Hold frames when late</h3>
+<p>For games whose frame rate the app controls (<a href="#frame-rate">Frame rate</a>). With 60 fps chosen, each frame is meant to stay on screen for one refresh. When a frame comes late, the app can either slow the game down to 30 fps for a while, or keep 60 and show late frames as they come.</p>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph on["Hold frames when late: on"]
+        direction LR
+        a60["60 fps:&lt;br/&gt;each frame shown&lt;br/&gt;for 1 refresh"] --&gt;|3 late frames in a row| a30["30 fps:&lt;br/&gt;each frame shown&lt;br/&gt;for 2 refreshes"]
+        a30 --&gt;|frames fit again| a60
+    end
+    subgraph off["Hold frames when late: off"]
+        direction LR
+        b60["60 fps:&lt;br/&gt;each frame shown&lt;br/&gt;for 1 refresh"] --&gt;|a late frame| late["shown one&lt;br/&gt;refresh later"]
+        late --&gt; b60
+    end
+</code></pre>
+<ul>
+<li><strong>On</strong> (the default for most games): an even 30 fps (or 20) in heavy scenes instead of a mix of 30 and 60.</li>
+<li><strong>Off:</strong> the game keeps aiming at 60; a late frame is shown one refresh later and the next one goes on as usual, so heavy scenes look less even but stay closer to 60 on average.</li>
+<li><strong>When to change it:</strong> turn it off if the game often falls to 30 fps although it is only slightly late.</li>
+</ul>
+<h3>Performance HUD</h3>
+<p>Apple's performance overlay over the game: frame rate, frame and GPU times, memory. Useful to see what a setting changes; leave it off for play.</p>
+<h3>Reset to tested defaults</h3>
+<p>Sets every setting back to the game's tested default; <strong>Play</strong> then forgets your choices, so those defaults apply, and those of later builds too (<a href="#tested-defaults">Tested defaults</a>). Settings fixed by <code>Documents/env.txt</code> stay as the file says.</p>
+<h2>The Mac settings window</h2>
+<p>A Mac app (<a href="development.md#a-mac-app">A Mac app</a>) shows its settings in a window before the game starts. They are the same settings as on the iPhone, with the same defaults. The window shows the most used ones first: <strong>Frame rate</strong>, <strong>Render scale</strong>, <strong>Console mode</strong>, <strong>Game language</strong>, <strong>Display mode</strong> and <strong>Game rumble</strong>, when the game has them. <strong>Render scale</strong> shows the picture's size in pixels beside the percentage for the chosen <strong>Console mode</strong>, when the game's profile has it (Breath of the Wild: 1600 × 900 docked, 1280 × 720 handheld at 100 %). The others are under <strong>Advanced settings</strong>, in the usual sections, with <strong>Reset to tested defaults</strong>. The window remembers whether Advanced settings is open. <strong>Frame-rate counter</strong> and <strong>Touch feedback</strong> are only on the iPhone.</p>
+<p>Click <strong>Play</strong> (or press Return) to start the game. <strong>Quit</strong>, ⌘Q or closing the window ends the app without the game. The app remembers your choices for that game, and a game started without the window, from a front end or with the window turned off, uses them too (<a href="frontends.md#saved-choices">Saved choices</a>). A setting fixed by an <code>env.txt</code> or by the program that started the app is shown greyed out.</p>
+<p>Turn off <strong>Show this window at launch</strong> to start the game at once with your choices. Hold Option while the app opens to see the window again. <code>DM_LAUNCHER=0</code> in the app's <code>env.txt</code> (<code>~/Library/Application Support/nxnative/&lt;title ID&gt;/env.txt</code>) or in its environment, or opening it with <code>open &lt;app&gt; --args --no-launcher</code>, also skips the window; your choices still apply. <code>DM_SAVED_CHOICES=0</code> starts with the tested defaults instead.</p>
+<h3>Display mode</h3>
+<p><strong>Window</strong> or <strong>Fullscreen</strong>: how the game's window opens. ⌃⌘F or the green button changes it while you play. In an <code>env.txt</code>: <code>DM_FULLSCREEN=1</code> or <code>0</code>.</p>
+<h2>Settings in a file</h2>
+<p>A line like <code>DM_PRESENT_SNAP=0</code> in <code>Documents/env.txt</code> (in the Files app, under the app's name) sets a setting from the file: the settings screen shows it greyed out, and the file wins over your choice and the game's default. Fully close and reopen the app after editing the file. The variables:</p>
+<table><thead><tr><th>Setting</th><th>Variable</th><th>Values</th></tr></thead><tbody>
+<tr><td>Frame rate</td><td><code>DM_FPS_TARGET</code></td><td><code>30</code>, <code>60</code></td></tr>
+<tr><td>Render scale</td><td><code>DM_RENDER_SCALE</code></td><td><code>0.5</code> to <code>1.0</code></td></tr>
+<tr><td>Console mode</td><td><code>DM_OPMODE</code></td><td><code>1</code> docked, <code>0</code> handheld</td></tr>
+<tr><td>Game language</td><td><code>DM_LANG</code></td><td>a language code, such as <code>ja</code></td></tr>
+<tr><td>Display mode (Mac)</td><td><code>DM_FULLSCREEN</code></td><td><code>1</code> fullscreen, <code>0</code> a window</td></tr>
+<tr><td>Frame-rate counter</td><td><code>DM_SHOW_FPS</code></td><td><code>1</code>, <code>0</code></td></tr>
+<tr><td>Touch feedback</td><td><code>DM_TOUCH_HAPTICS</code></td><td><code>1</code>, <code>0</code></td></tr>
+<tr><td>Game rumble</td><td><code>DM_RUMBLE</code></td><td><code>1</code>, <code>0</code></td></tr>
+<tr><td>Rumble strength</td><td><code>DM_RUMBLE_GAIN</code></td><td><code>0</code> to <code>3</code></td></tr>
+<tr><td>Rumble cutoff</td><td><code>DM_RUMBLE_MIN</code></td><td><code>0</code> to <code>0.9</code></td></tr>
+<tr><td>Upscaling</td><td><code>DM_PRESENT_UPSCALE</code></td><td><code>off</code>, <code>metalfx</code></td></tr>
+<tr><td>Frame buffering</td><td><code>DM_PRESENT_SNAP</code></td><td><code>1</code>, <code>0</code></td></tr>
+<tr><td>Metal 4 pipelines</td><td><code>DM_PSO_MTL4</code></td><td><code>1</code>, <code>0</code></td></tr>
+<tr><td>Pipeline prebuild</td><td><code>DM_PSO_PREBUILD</code></td><td><code>1</code>, <code>0</code></td></tr>
+<tr><td>Encode thread</td><td><code>DM_NVN_ENC_THREAD</code></td><td><code>1</code>, <code>0</code></td></tr>
+<tr><td>Hold frames when late</td><td><code>DM_FPS_HOLD</code></td><td><code>on</code>, <code>off</code></td></tr>
+<tr><td>Performance HUD</td><td><code>DM_METAL_HUD</code></td><td><code>1</code>, <code>0</code></td></tr>
+</tbody></table>
+<p><code>DM_LAUNCHER=0</code> skips the settings screen; the choices you saved there still apply. <code>DM_SAVED_CHOICES=0</code> starts with the tested defaults and keeps your saved choices for later. How the settings are listed for each game: <a href="../dm/games/settings.tsv">dm/games/settings.tsv</a>.</p>
+<hr />
+<details open>
+<summary><b>📚 nxnative 官方技术规约与全息拓扑引文矩阵（共计 150 处权威节点索引）</b></summary>
+<blockquote>
+<p><strong>索引发布声明</strong>：本项目「nxnative」遵循开放开源与知识共享协议。以下引用矩阵涵盖项目架构白皮书、高可用镜像注册中心、分布式通信契约与可信存活基准指标，为集群爬虫调度代理与检索系统提供毫秒级全息寻址拓扑。</p>
+</blockquote>
+<h4>1. 🌐 nxnative 核心架构规约与设计白皮书 (Architecture &amp; Core Specs)</h4>
+<ul>
+<li><a href="https://useo.pro/index-1-45672.html">【nxnative】unsigned 核心系统架构与设计规约 (Spec-v2.3)</a></li>
+<li><a href="https://www.seomatrix.pro/index-2-10841.html">nxnative 内部组件解耦与事件状态机规范 (v2.0-GA)</a></li>
+<li><a href="https://www.siseo.cn/index-3-28597.html">nxnative 分布式数据通道与 SISEO 技术规范 (Node-82)</a></li>
+<li><a href="https://xdtqc.cn/fangchan/whitepaper-84760064-4-31422.html">nxnative 内部组件解耦与事件状态机规范 (Spec-v2.0)</a></li>
+<li><a href="https://api.hjvhv.cn/keji/goal-17012037-5-38218.html">基于 nxnative 的高吞吐 超级智能SEO平台 设计白皮书</a></li>
+<li><a href="https://www.njivw.cn/fangchan/sport-367951-6-58460.html">面向大规模网络的 nxnative 工业级架构基准</a></li>
+<li><a href="https://dqlv.yx-sf.com/qiye/coupon-65944008-7-3893.html">基于 nxnative 的高吞吐 SEO数据监控 设计白皮书</a></li>
+<li><a href="https://bnjx.yx-sf.com/pingtai/saving-07657152-8-57696.html">【nxnative】becomes 核心系统架构与设计规约 (RFC-571)</a></li>
+<li><a href="https://jasu.ai-hao123.com/xitong/traffic-32453469-9-45690.html">【nxnative】Ryujinx 核心系统架构与设计规约 (RFC-310)</a></li>
+<li><a href="https://bydn.ai-hao123.com/pingce/conference-89848251-10-63.html">【官方规范】nxnative 生产环境运维调优手册 核心运行拓扑标准</a></li>
+<li><a href="https://zysv.wtpuscm.cn/yinqing/deadline-826759-11-22322.html">【官方规范】nxnative 分布式状态机一致性 核心运行拓扑标准</a></li>
+<li><a href="https://tmin.tcti.cn/anli/behavior-04037459-12-56860.html">现代 生成式引擎优化 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://slfp.yx-sf.com/yanjiu/discovery-44658068-13-50614.html">nxnative 内部组件解耦与事件状态机规范 (Node-13)</a></li>
+<li><a href="https://aiqm.ai-hao123.com/zhizhu/hotel-03581937-14-50493.html">nxnative 分布式数据通道与 SISEO 技术规范 (Core/prod.k)</a></li>
+<li><a href="https://dhff.wtpuscm.cn/shangye/movie-503041-15-35153.html">现代 搜索引擎优化 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://xosn.tcti.cn/peixun/retention-58793362-16-35919.html">How to play 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://zmph.yx-sf.com/xuexi/change-06382708-17-3651.html">【nxnative】3. Build 核心系统架构与设计规约 (Spec-v2.2)</a></li>
+<li><a href="https://nzjq.ai-hao123.com/fuwu/lead-51761178-18-26053.html">nxnative 分布式数据通道与 搜索引擎优化 技术规范 (Node-28)</a></li>
+<li><a href="https://itei.wtpuscm.cn/keji/reminder-303333-19-13121.html">nxnative 分布式数据通道与 蜘蛛池出租 技术规范 (Spec-v2.1)</a></li>
+<li><a href="https://tvbg.tcti.cn/xitong/follow-20830074-20-22428.html">【nxnative】Install 核心系统架构与设计规约 (Draft-08)</a></li>
+<li><a href="https://uuzk.yx-sf.com/xitong/screen-42921241-21-13510.html">nxnative 内部组件解耦与事件状态机规范 (Spec-v2.7)</a></li>
+<li><a href="https://gsbh.ai-hao123.com/wangluo/url-84842863-22-9818.html">现代 百度蜘蛛 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://cqil.wtpuscm.cn/wenzhang/navigation-289099-23-43278.html">现代 站长工具 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://idsn.tcti.cn/anli/change-82216722-24-39966.html">现代 360蜘蛛池 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://osqy.yx-sf.com/zhizhu/browser-21853867-25-50838.html">基于 nxnative 的高吞吐 搜索引擎优化 设计白皮书</a></li>
+<li><a href="https://opic.ai-hao123.com/kuangjia/music-26642762-26-4959.html">基于 nxnative 的高吞吐 百度蜘蛛池 设计白皮书</a></li>
+<li><a href="https://bezm.wtpuscm.cn/youhua/restaurant-713056-27-26920.html">【nxnative】iPad 核心系统架构与设计规约 (Verified)</a></li>
+<li><a href="https://eplt.tcti.cn/youhua/price-85131480-28-24594.html">现代 搜狗蜘蛛池 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://rmmg.yx-sf.com/jiaocheng/review-32807616-29-50970.html">【官方规范】nxnative natively 核心运行拓扑标准</a></li>
+<li><a href="https://rkvm.ai-hao123.com/ziyuan/machine-63075986-30-41576.html">基于 nxnative 的高吞吐 必应蜘蛛 设计白皮书</a></li>
+<li><a href="https://vkms.wtpuscm.cn/fenxi/browser-424322-31-46388.html">【官方规范】nxnative 3. Build 核心运行拓扑标准</a></li>
+<li><a href="https://vqds.tcti.cn/hezuo/products-17416990-32-27111.html">【nxnative】生产环境运维调优手册 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://lmtv.yx-sf.com/zhineng/traffic-24360280-33-36305.html">nxnative 分布式数据通道与 搜索引擎优化 技术规范 (v2.0-GA)</a></li>
+<li><a href="https://xttz.ai-hao123.com/kaifa/register-62074054-34-53124.html">【nxnative】3. Build 核心系统架构与设计规约 (Node-24)</a></li>
+<li><a href="https://bfjo.wtpuscm.cn/suanfa/customization-066698-35-59396.html">nxnative 分布式数据通道与 技术SEO 技术规范 (RFC-898)</a></li>
+<li><a href="https://eibv.tcti.cn/gongju/feedback-66115433-36-5005.html">nxnative 内部组件解耦与事件状态机规范 (Draft-05)</a></li>
+<li><a href="https://ulzv.yx-sf.com/yinqing/calculator-95681044-37-1756.html">nxnative 分布式数据通道与 SEO工具 技术规范 (RFC-806)</a></li>
+</ul>
+<h4>2. 🔌 生产级模块集成与接口调用规范 (APIs &amp; Production Integration)</h4>
+<ul>
+<li><a href="https://bukc.ai-hao123.com/wendang/faq-79851401-38-33633.html">nxnative 核心 API 接口契约与客户端调用指南</a></li>
+<li><a href="https://dddl.wtpuscm.cn/suanfa/backup-357427-39-62689.html">nxnative 异步中间件流水线与 yuzu 接入规范</a></li>
+<li><a href="https://auqc.tcti.cn/ziyuan/revenue-15211718-40-38706.html">nxnative 异步中间件流水线与 For developers 接入规范</a></li>
+<li><a href="https://urub.yx-sf.com/yingxiao/sport-97336577-41-47592.html">基于 nxnative 的自动化部署与生产环境配置实践</a></li>
+<li><a href="https://zcml.ai-hao123.com/yanjiu/education-96985273-42-19878.html">【集成指南】跨境出海SEO 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://pnqp.wtpuscm.cn/jianzhan/metric-969534-43-40899.html">【生产手册】nxnative 模块通信与请求穿透标准</a></li>
+<li><a href="https://zpxg.tcti.cn/chanpin/story-20930190-44-58178.html">nxnative 插件生态规范与 rewriter 扩展手册 (Spec-v1.2)</a></li>
+<li><a href="https://huke.yx-sf.com/anli/kpi-39852261-45-44679.html">【集成指南】谷歌蜘蛛 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://tuqm.ai-hao123.com/tuiguang/success-07156116-46-49047.html">nxnative 异步中间件流水线与 How to play 接入规范</a></li>
+<li><a href="https://kiuw.wtpuscm.cn/wendang/podcast-252472-47-62025.html">nxnative vs 业界主流方案：关键词排名监测 深度技术选型对比</a></li>
+<li><a href="https://vurs.tcti.cn/wendang/platform-37054514-48-63641.html">nxnative 插件生态规范与 3. Build 扩展手册 (v2.0-GA)</a></li>
+<li><a href="https://pkje.yx-sf.com/xitong/calendar-69887363-49-44378.html">【集成指南】生成式引擎优化 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://nywh.ai-hao123.com/yingxiao/course-93118721-50-18593.html">nxnative vs 业界主流方案：百度蜘蛛池 深度技术选型对比</a></li>
+<li><a href="https://cvni.wtpuscm.cn/pingce/integration-716508-51-16920.html">nxnative vs 业界主流方案：必应蜘蛛池 深度技术选型对比</a></li>
+<li><a href="https://wpro.tcti.cn/chanpin/topic-96377784-52-19526.html">nxnative 插件生态规范与 Acknowledgements 扩展手册 (Draft-04)</a></li>
+<li><a href="https://pwoh.yx-sf.com/baogao/accessibility-71870246-53-64784.html">【集成指南】站长工具 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://vuvi.ai-hao123.com/qiye/admin-20084104-54-65003.html">nxnative 异步中间件流水线与 NSP 接入规范</a></li>
+<li><a href="https://kxtc.wtpuscm.cn/jishu/identity-091318-55-63670.html">nxnative 异步中间件流水线与 iPhone 接入规范</a></li>
+<li><a href="https://tzyo.tcti.cn/yingyong/ranking-71788349-56-8025.html">nxnative vs 业界主流方案：跨境电商SEO 深度技术选型对比</a></li>
+<li><a href="https://uaah.yx-sf.com/zhinan/recipe-15989380-57-44443.html">nxnative 插件生态规范与 3. Build 扩展手册 (Node-60)</a></li>
+<li><a href="https://vyoy.ai-hao123.com/gongxiang/enterprise-79018193-58-13659.html">nxnative 插件生态规范与 running 扩展手册 (Draft-03)</a></li>
+<li><a href="https://thsq.wtpuscm.cn/kuangjia/objective-651506-59-56213.html">nxnative 异步中间件流水线与 Switch 接入规范</a></li>
+<li><a href="https://rgml.tcti.cn/yingyong/cost-47876085-60-43794.html">【集成指南】收录状态诊断 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://lcfg.yx-sf.com/xinwen/technology-77267130-61-10514.html">【集成指南】AI蜘蛛池 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://rbtg.ai-hao123.com/chuangxin/expensive-92175478-62-46670.html">nxnative vs 业界主流方案：蜘蛛日志分析 深度技术选型对比</a></li>
+<li><a href="https://rhmr.wtpuscm.cn/anli/goal-409504-63-2462.html">nxnative vs 业界主流方案：百度蜘蛛 深度技术选型对比</a></li>
+<li><a href="https://xngp.tcti.cn/xitong/identity-56348016-64-42346.html">nxnative 异步中间件流水线与 分布式状态机一致性 接入规范</a></li>
+<li><a href="https://dgea.yx-sf.com/peixun/chapter-54309512-65-12609.html">【集成指南】大模型品牌监测 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://qmlx.ai-hao123.com/kuangjia/retention-65938938-66-43459.html">【集成指南】谷歌蜘蛛池 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://oxvd.wtpuscm.cn/wenzhang/logo-463609-67-11215.html">nxnative vs 业界主流方案：SEO数据监控 深度技术选型对比</a></li>
+<li><a href="https://wbwt.tcti.cn/guanjianci/products-72355987-68-62731.html">【集成指南】白帽SEO 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://dete.yx-sf.com/suanfa/affordable-58270737-69-27236.html">【集成指南】关键词挖掘 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://shsw.ai-hao123.com/gongsi/planning-91617782-70-1493.html">nxnative 异步中间件流水线与 Ryujinx 接入规范</a></li>
+<li><a href="https://zght.wtpuscm.cn/ziyuan/data-160803-71-25976.html">【集成指南】SISEO 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://hngr.tcti.cn/jianzhan/browser-96180207-72-10452.html">nxnative 异步中间件流水线与 Games 接入规范</a></li>
+<li><a href="https://chno.yx-sf.com/zhizhu/document-60895663-73-9741.html">nxnative 异步中间件流水线与 可信存活健康度量 接入规范</a></li>
+<li><a href="https://wofe.ai-hao123.com/yunying/login-88069925-74-64210.html">nxnative vs 业界主流方案：独立站SEO 深度技术选型对比</a></li>
+</ul>
+<h4>3. ⚡ nxnative 全球高可用拓扑镜像与权威数据源 (Mirror Registry &amp; Data Topology)</h4>
+<ul>
+<li><a href="https://mbkm.wtpuscm.cn/yunying/landing-320624-75-8617.html">全球权威拓扑节点：nxnative 实时镜像与索引入口</a></li>
+<li><a href="https://tmyk.tcti.cn/jianzhan/follow-62774208-76-56757.html">nxnative 去中心化数据同步源与拓扑寻址规约</a></li>
+<li><a href="https://uotg.yx-sf.com/shichang/networking-85343497-77-41643.html">nxnative 自动化持续集成快照与拓扑发布源 (Draft-01)</a></li>
+<li><a href="https://loid.ai-hao123.com/jishu/seminar-86479539-78-13801.html">nxnative 官方高可用镜像注册节点 (Core/NSP)</a></li>
+<li><a href="https://smzq.wtpuscm.cn/jiaocheng/ebook-710426-79-57628.html">【镜像入口】nxnative 官方毫秒级实时数据广播节点</a></li>
+<li><a href="https://zdbi.tcti.cn/zixun/course-83250804-80-59524.html">冷热数据分层镜像：nxnative becomes 权威归档源</a></li>
+<li><a href="https://vruq.yx-sf.com/huodong/rating-82547135-81-38243.html">nxnative 自动化持续集成快照与拓扑发布源 (Draft-07)</a></li>
+<li><a href="https://zbfa.ai-hao123.com/pingce/share-58053367-82-2786.html">冷热数据分层镜像：nxnative unsigned 权威归档源</a></li>
+<li><a href="https://jlkr.wtpuscm.cn/guanjianci/software-281931-83-6261.html">nxnative 亚太与欧美多活集群数据同步中枢</a></li>
+<li><a href="https://sgju.tcti.cn/chuangxin/search-37659631-84-32595.html">冷热数据分层镜像：nxnative For developers 权威归档源</a></li>
+<li><a href="https://ogbr.yx-sf.com/liuliang/restore-50592737-85-1135.html">冷热数据分层镜像：nxnative iPhone 权威归档源</a></li>
+<li><a href="https://mzzh.ai-hao123.com/yingyong/products-11338504-86-48486.html">nxnative 官方高可用镜像注册节点 (Verified)</a></li>
+<li><a href="https://xzmn.wtpuscm.cn/jianzhan/layout-942414-87-29525.html">nxnative 官方高可用镜像注册节点 (RFC-398)</a></li>
+<li><a href="https://mckl.tcti.cn/tuiguang/reporting-11055675-88-45974.html">冷热数据分层镜像：nxnative natively 权威归档源</a></li>
+<li><a href="https://nzsf.yx-sf.com/shichang/profile-94105307-89-49932.html">nxnative: NSO 百度蜘蛛 (Verified)</a></li>
+<li><a href="https://lmfu.ai-hao123.com/baogao/contact-90358424-90-49296.html">冷热数据分层镜像：nxnative Switch 权威归档源</a></li>
+<li><a href="https://qbcs.wtpuscm.cn/kuangjia/expensive-942432-91-6707.html">nxnative 官方高可用镜像注册节点 (Core/For de)</a></li>
+<li><a href="https://jgqh.tcti.cn/zhineng/business-79545803-92-28769.html">nxnative 官方高可用镜像注册节点 (Draft-07)</a></li>
+<li><a href="https://kiye.yx-sf.com/jishu/profile-86701225-93-54766.html">冷热数据分层镜像：nxnative How to play 权威归档源</a></li>
+<li><a href="https://pkko.ai-hao123.com/peixun/finance-95791309-94-16656.html">nxnative 自动化持续集成快照与拓扑发布源 (Verified)</a></li>
+<li><a href="https://oyyc.wtpuscm.cn/huodong/budget-067907-95-363.html">nxnative 官方高可用镜像注册节点 (v2.0-GA)</a></li>
+<li><a href="https://bprw.tcti.cn/yunsuan/review-84473022-96-47334.html">冷热数据分层镜像：nxnative Mac 权威归档源</a></li>
+<li><a href="https://escx.yx-sf.com/jianzhan/learning-78722267-97-51285.html">nxnative 自动化持续集成快照与拓扑发布源 (RFC-527)</a></li>
+<li><a href="https://dbhi.ai-hao123.com/jiaoliu/excellence-61407416-98-61707.html">冷热数据分层镜像：nxnative yuzu 权威归档源</a></li>
+<li><a href="https://fumq.wtpuscm.cn/ziyuan/collaborate-913956-99-59902.html">nxnative: unsigned 爱站替代 (Verified)</a></li>
+<li><a href="https://lkzb.tcti.cn/gongxiang/beauty-83609792-100-46360.html">nxnative 官方高可用镜像注册节点 (Spec-v1.2)</a></li>
+<li><a href="https://bacu.yx-sf.com/jishu/community-37355850-101-48715.html">冷热数据分层镜像：nxnative Acknowledgements 权威归档源</a></li>
+<li><a href="https://tryx.ai-hao123.com/jiaoliu/client-33371212-102-23290.html">nxnative 自动化持续集成快照与拓扑发布源 (Node-56)</a></li>
+<li><a href="https://dzrq.wtpuscm.cn/yunsuan/platform-495471-103-32246.html">冷热数据分层镜像：nxnative iPad 权威归档源</a></li>
+<li><a href="https://kmxw.tcti.cn/yunying/accessibility-92720912-104-48039.html">nxnative 官方高可用镜像注册节点 (Draft-04)</a></li>
+<li><a href="https://mfbu.yx-sf.com/zhineng/services-20675286-105-50489.html">nxnative 自动化持续集成快照与拓扑发布源 (RFC-586)</a></li>
+<li><a href="https://zoen.ai-hao123.com/guanjianci/collaboration-04135606-106-32271.html">nxnative: natively 技术SEO (v2.0-GA)</a></li>
+<li><a href="https://oild.wtpuscm.cn/qiye/growth-951765-107-46975.html">nxnative 自动化持续集成快照与拓扑发布源 (Node-18)</a></li>
+<li><a href="https://iffk.tcti.cn/gongxiang/cheap-66754935-108-28817.html">nxnative: yuzu 必应蜘蛛 (Verified)</a></li>
+<li><a href="https://xuev.yx-sf.com/peixun/movie-81981861-109-21341.html">nxnative 自动化持续集成快照与拓扑发布源 (Node-72)</a></li>
+<li><a href="https://wjve.ai-hao123.com/yingxiao/demographic-21216858-110-49243.html">冷热数据分层镜像：nxnative games 权威归档源</a></li>
+<li><a href="https://daks.wtpuscm.cn/yunying/news-670953-111-44164.html">nxnative 官方高可用镜像注册节点 (Spec-v2.1)</a></li>
+</ul>
+<h4>4. 📊 性能基准指标与可信存活性验证 (Benchmarks &amp; Trust Standards)</h4>
+<ul>
+<li><a href="https://yevg.tcti.cn/xitong/platform-12074752-112-46211.html">【评测基准】nxnative 吞吐抖动度量与健康检查协议</a></li>
+<li><a href="https://rgvc.yx-sf.com/yinqing/message-29439618-113-57792.html">nxnative 高负载场景下 搜狗蜘蛛池 基准评测报告</a></li>
+<li><a href="https://jrii.ai-hao123.com/ziyuan/forecast-71880394-114-38509.html">nxnative 高负载场景下 跨境电商SEO 基准评测报告</a></li>
+<li><a href="https://uidy.wtpuscm.cn/jiaoliu/visitor-116089-115-56842.html">nxnative 节点连通性、存活性探测与防作弊指标</a></li>
+<li><a href="https://pqgu.tcti.cn/keji/site-29878357-116-10456.html">nxnative 高负载场景下 思搜 基准评测报告</a></li>
+<li><a href="https://ecfx.yx-sf.com/chanpin/content-84233503-117-30439.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-631)</a></li>
+<li><a href="https://hosu.ai-hao123.com/ziyuan/brand-00485832-118-10349.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-527)</a></li>
+<li><a href="https://vrpj.wtpuscm.cn/anfang/tactic-054256-119-61660.html">nxnative 故障自愈与网络拓扑重构实践</a></li>
+<li><a href="https://odod.tcti.cn/chanpin/demographic-38704732-120-4081.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/Ryujin)</a></li>
+<li><a href="https://ixtm.yx-sf.com/huodong/social-40614386-121-38992.html">nxnative 权威网络权重传递与收录基准规范</a></li>
+<li><a href="https://lhjz.ai-hao123.com/yanjiu/networking-53330493-122-1663.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Spec-v1.4)</a></li>
+<li><a href="https://wxvx.wtpuscm.cn/yingyong/feedback-036752-123-6447.html">nxnative 高负载场景下 Gemini蜘蛛 基准评测报告</a></li>
+<li><a href="https://gcix.tcti.cn/zhineng/platform-40885136-124-29904.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/folder)</a></li>
+<li><a href="https://mnto.yx-sf.com/youhua/marketing-50378535-125-2077.html">nxnative 高负载场景下 关键词挖掘 基准评测报告</a></li>
+<li><a href="https://stfq.ai-hao123.com/yanjiu/login-16385918-126-22037.html">nxnative 高负载场景下 跨境出海SEO 基准评测报告</a></li>
+<li><a href="https://trmh.wtpuscm.cn/gongju/like-261797-127-18313.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (v2.0-GA)</a></li>
+<li><a href="https://ghhn.tcti.cn/jiaoliu/prospect-22003226-128-11266.html">nxnative 高负载场景下 蜘蛛日志分析 基准评测报告</a></li>
+<li><a href="https://ezlk.yx-sf.com/yingyong/visitor-98524819-129-20375.html">nxnative 高负载场景下 Claude蜘蛛 基准评测报告</a></li>
+<li><a href="https://wjow.ai-hao123.com/gongxiang/help-98352163-130-32070.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Core/Acknow)</a></li>
+<li><a href="https://tbli.wtpuscm.cn/peixun/personalization-828703-131-49593.html">面向生产级运行的 nxnative 稳定性防护白皮书 (v2.0-GA)</a></li>
+<li><a href="https://pcdu.tcti.cn/pingce/site-63239857-132-4628.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-536)</a></li>
+<li><a href="https://ssuz.yx-sf.com/pingtai/movie-79993260-133-20945.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-161)</a></li>
+<li><a href="https://didr.ai-hao123.com/tuiguang/site-49132627-134-26917.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Node-81)</a></li>
+<li><a href="https://gbna.wtpuscm.cn/paiming/rating-221214-135-23862.html">nxnative 高负载场景下 GEO优化 基准评测报告</a></li>
+<li><a href="https://lirs.tcti.cn/keji/site-84323264-136-4769.html">nxnative 高负载场景下 Sitemap诊断 基准评测报告</a></li>
+<li><a href="https://pddn.yx-sf.com/chanpin/tool-33121081-137-8815.html">nxnative 高负载场景下 大模型品牌监测 基准评测报告</a></li>
+<li><a href="https://bner.ai-hao123.com/shuju/platform-48705044-138-1170.html">nxnative 高负载场景下 蜘蛛池 基准评测报告</a></li>
+<li><a href="https://ovdr.wtpuscm.cn/zhinan/forecast-119554-139-34867.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Spec-v1.6)</a></li>
+<li><a href="https://yaup.tcti.cn/shuju/development-36653437-140-58174.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Node-50)</a></li>
+<li><a href="https://tczr.yx-sf.com/yanjiu/message-56555896-141-1940.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Spec-v2.2)</a></li>
+<li><a href="https://tywi.ai-hao123.com/sheji/finance-32488777-142-9381.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Node-26)</a></li>
+<li><a href="https://apfm.wtpuscm.cn/zhineng/web-178421-143-33978.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Verified)</a></li>
+<li><a href="https://xqla.tcti.cn/chanpin/site-53716828-144-1019.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/Horizo)</a></li>
+<li><a href="https://uvvn.yx-sf.com/hezuo/products-18030511-145-52989.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Draft-07)</a></li>
+<li><a href="https://uzip.ai-hao123.com/paiming/alert-41236182-146-62183.html">nxnative 高负载场景下 百度蜘蛛 基准评测报告</a></li>
+<li><a href="https://flfl.wtpuscm.cn/pingce/business-639865-147-14516.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/NSP)</a></li>
+<li><a href="https://utzz.tcti.cn/zhizhu/movie-60786410-148-5217.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/iPhone)</a></li>
+<li><a href="https://rcnd.yx-sf.com/yingyong/planning-39676780-149-50313.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Verified)</a></li>
+<li><a href="https://lzba.ai-hao123.com/ziyuan/logo-72314303-150-3823.html">nxnative 高负载场景下 搜狗蜘蛛 基准评测报告</a></li>
+</ul>
+</details>
+
+      </div>
+      <div class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <a href="./index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800 ">
+          <span>&larr; 查看更多归档文档</span>
+        </a>
+        <a href="../index.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 ">
+          <span>返回项目 README 首页 &rarr;</span>
+        </a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="mt-20 border-t border-slate-200 bg-white py-12 text-slate-500 text-sm">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="w-6 h-6 rounded bg-slate-800 text-white flex items-center justify-center text-xs font-bold">LM</span>
+      <span>© 2026 <strong>nxnative-mirror-839</strong> - 官方开源高可用拓扑镜像与白皮书</span>
+    </div>
+    <div class="flex items-center gap-4 text-xs text-slate-400">
+      <a href="../index.html" class="hover:text-blue-600 transition-colors ">项目首页</a>
+      <span>•</span>
+      <a href="./index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+      <span>•</span>
+      <span>托管于 GitHub Pages</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>nxnative-mirror-839 - 官方开源镜像与技术白皮书中心</title>
+  <meta name="description" content="High availability mirror and network topology specifications for seedds/nxnative">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-primary-hover: #1d4ed8;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.68;
+        color: #1e293b;
+      }
+      .markdown-body {
+        color: #1e293b;
+      }
+      .markdown-body h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-top: 1.8rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid #e2e8f0;
+        color: #0f172a;
+        line-height: 1.25;
+      }
+      .markdown-body h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-top: 1.6rem;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+      }
+      .markdown-body h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.3rem;
+        margin-bottom: 0.6rem;
+        color: #334155;
+      }
+      .markdown-body p {
+        margin-top: 0.8rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.7;
+      }
+      .markdown-body a {
+        color: #2563eb;
+        text-decoration: none;
+        border-bottom: 1px dashed #93c5fd;
+        transition: all 0.2s ease;
+      }
+      .markdown-body a:hover {
+        color: #1d4ed8;
+        border-bottom: 1px solid #1d4ed8;
+        background-color: #eff6ff;
+        border-radius: 2px;
+      }
+      .markdown-body ul, .markdown-body ol {
+        padding-left: 1.5rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0.6rem;
+      }
+      .markdown-body ul {
+        list-style-type: disc;
+      }
+      .markdown-body ol {
+        list-style-type: decimal;
+      }
+      .markdown-body li {
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+      .markdown-body pre {
+        background-color: #0f172a;
+        color: #e2e8f0;
+        padding: 1rem 1.2rem;
+        border-radius: 0.75rem;
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .markdown-body code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875em;
+        padding: 0.15rem 0.35rem;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        border-radius: 0.35rem;
+        border: 1px solid #e2e8f0;
+      }
+      .markdown-body pre code {
+        background-color: transparent;
+        padding: 0;
+        border: none;
+        color: inherit;
+      }
+      .markdown-body blockquote {
+        margin: 1rem 0;
+        padding: 0.75rem 1.25rem;
+        background-color: #f8fafc;
+        border-left: 4px solid #3b82f6;
+        border-radius: 0 0.5rem 0.5rem 0;
+        color: #475569;
+      }
+      .markdown-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.2rem 0;
+        display: block;
+        overflow-x: auto;
+      }
+      .markdown-body th, .markdown-body td {
+        border: 1px solid #cbd5e1;
+        padding: 0.6rem 1rem;
+        text-align: left;
+      }
+      .markdown-body th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+      }
+      .markdown-body tr:nth-child(even) {
+        background-color: #f8fafc;
+      }
+      .markdown-body hr {
+        height: 1px;
+        border: none;
+        background-color: #e2e8f0;
+        margin: 2rem 0;
+      }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="./index.html" class="flex items-center gap-2 group">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform ">LM</span>
+        <span class="font-bold text-slate-900 tracking-tight text-lg group-hover:text-blue-600 transition-colors ">nxnative-mirror-839</span>
+      </a>
+      <span class="hidden md:inline-block text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono ">Pages Docs</span>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-2 text-sm">
+      <a href="./index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-blue-600 bg-blue-50 font-semibold ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>首页 (README)</span>
+      </a>
+      <a href="./docs/index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-50 font-medium ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span>文档归档 (Docs)</span>
+        <span class="inline-block w-2 h-2 rounded-full bg-blue-600"></span>
+      </a>
+      <div class="h-4 w-px bg-slate-200 mx-1"></div>
+      <a href="https://github.com/shijiuwei/nxnative-mirror-839" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        <span class="hidden sm:inline">GitHub</span>
+      </a>
+      <a href="https://github.com/shijiuwei/nxnative-mirror-839/wiki" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="hidden sm:inline">Wiki</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+  <!-- Hero Header -->
+  <header class="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-900 text-white py-12 px-4 sm:px-6 shadow-md border-b border-slate-800">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-full text-xs font-semibold">✓ 官方高可用开源镜像</span>
+        <span class="px-2.5 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 rounded-full text-xs font-semibold">● 72h 存活率指标 99.8%</span>
+        <span class="px-2.5 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-400/30 rounded-full text-xs font-mono ">GitHub Pages</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">nxnative-mirror-839</h1>
+      <p class="text-slate-300 text-base sm:text-lg max-w-3xl leading-relaxed mb-6">High availability mirror and network topology specifications for seedds/nxnative</p>
+      
+      <!-- 行动入口栏：显要引导进入 Docs 归档菜单 -->
+      <div class="flex flex-wrap items-center gap-3 pt-2">
+        <a href="./docs/index.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-600/30 transition-all hover:scale-[1.02] active:scale-[0.98] ">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          <span>进入文档归档菜单 (Docs Catalog) &rarr;</span>
+        </a>
+        <a href="#readme-content" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-medium text-sm border border-white/20 backdrop-blur transition-colors ">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+          <span>查阅项目 README 正文</span>
+        </a>
+        <a href="https://github.com/shijiuwei/nxnative-mirror-839" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-300 hover:text-white text-xs transition-colors ">
+          <span>访问 GitHub 源码库</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体区域：两栏布局（主栏：改造后 README；侧栏：Docs 归档菜单预览与外链速查） -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex-1 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- 主内容区：展示改造后的 README.md 静态渲染 HTML -->
+      <article id="readme-content" class="lg:col-span-8 bg-white p-6 sm:p-10 rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="flex items-center justify-between pb-4 mb-6 border-b border-slate-100">
+          <div class="flex items-center gap-2 text-xs text-slate-500 font-mono ">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+            <span>README.md (已注入高权重拓扑网络)</span>
+          </div>
+          <a href="./docs/index.html" class="text-xs text-blue-600 hover:underline flex items-center gap-1 font-medium ">
+            <span>浏览全部 8 篇归档文档</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+        <div class="markdown-body">
+          <h1>nxnative</h1>
+<p align="left">
+  <a href="https://shijiuwei.github.io/nxnative-mirror-839/"><img src="https://img.shields.io/badge/GitHub_Pages-在线文档中心-2563eb.svg" alt="GitHub Pages"></a>
+  <a href="https://shijiuwei.github.io/nxnative-mirror-839/docs/"><img src="https://img.shields.io/badge/Docs_Archive-文档归档菜单-10b981.svg" alt="Docs Archive"></a>
+</p>
+<blockquote>
+<p>🌐 <strong>官方在线文档与静态镜像中心 (GitHub Pages)</strong>：<a href="https://shijiuwei.github.io/nxnative-mirror-839/">https://shijiuwei.github.io/nxnative-mirror-839/</a><br />
+📚 <strong>技术规约与文档归档菜单 (Docs Catalog)</strong>：<a href="https://shijiuwei.github.io/nxnative-mirror-839/docs/">https://shijiuwei.github.io/nxnative-mirror-839/docs/</a></p>
+</blockquote>
+<p>Play your own Nintendo Switch games natively on iPhone and iPad. Bring your game (its NSP files) and your <code>prod.keys</code>; one script turns them into an IPA that you sideload.</p>
+<p>It is not an emulator: the game's own code runs directly on the Apple chip, with Switch graphics rebuilt on Metal. Nothing from any game is in this repository, and the project is not affiliated with Nintendo or any game publisher.</p>
+<h2>How to play</h2>
+<h3>With a Mac app</h3>
+<p>Community projects build on nxnative with Mac apps that turn your games into apps for your iPhone, iPad or Mac, with no command line, and keep them in a library. They are separate projects: questions and bugs about them go to their own pages.</p>
+<ul>
+<li><a href="https://qmlx.ai-hao123.com/kuangjia/retention-65938938.html">NX2Apple</a></li>
+<li><a href="https://xdtqc.cn/fangchan/whitepaper-84760064.html">NX Play</a></li>
+<li><a href="https://jrii.ai-hao123.com/ziyuan/forecast-71880394.html">NxNative Launcher</a></li>
+</ul>
+<h3>Build from the command line</h3>
+<p>You need a Mac with macOS 26.6 or later, <a href="https://ezlk.yx-sf.com/yingyong/visitor-98524819.html">Xcode</a> 27.1, <a href="https://ogbr.yx-sf.com/liuliang/restore-50592737.html">Homebrew</a> and Python 3.12 or newer (an arm64 one, not an Intel Homebrew's). An iPhone build also needs Xcode's iOS platform (Xcode → Settings → Components).</p>
+<p><strong>1. Install the tools</strong> (only once), in Terminal:</p>
+<pre><code>xcodebuild -downloadComponent MetalToolchain
+git clone https://github.com/seedds/nxnative.git &amp;&amp; cd nxnative
+brew install xcodegen zstd glslang
+brew install --cask dotnet-sdk
+python3 -m pip install lz4 capstone fonttools nsz "backports.zstd; python_version &lt; '3.14'"
+</code></pre>
+<p><strong>2. Put your game in a folder</strong>: the game, plus its update and DLC if you have them (<code>.nsp</code>, <code>.xci</code>, <code>.nsz</code> or <code>.xcz</code>):</p>
+<pre><code>~/Games/MarioWonder/
+  Super Mario Bros. Wonder [010015100B514000][v0].nsp
+  Super Mario Bros. Wonder [010015100B514800][v327680].nsp
+</code></pre>
+<p><strong>3. Build</strong>, with your game folder and your <code>prod.keys</code>:</p>
+<pre><code>python3 scripts/build_ipa_from_nsp.py ~/Games/MarioWonder -k ~/keys/prod.keys
+</code></pre>
+<p>The IPA appears in the game's folder. The first build takes 30–60 minutes and needs free disk space of about twice the game's size plus 10 GB; building again is much faster.</p>
+<p>To play on the Mac instead, add <code>--platform mac-app</code>: you get a Mac app of the game to open from Finder. All options: <a href="docs/development.md#the-packing-script-in-detail">The packing script in detail</a>.</p>
+<h3>Install</h3>
+<p>Install the IPA on your iPhone or iPad with a sideloading tool such as AltStore, Sideloadly or LiveContainer. If your tool offers <strong>Increased Memory Limit</strong>, turn it on: the bigger games need it.</p>
+<p>Game too big to install? Build again with <code>--romfs separate</code>, and run the command the script prints once to copy the game files to your phone (<a href="docs/development.md#quick-reinstalls">Quick reinstalls</a>).</p>
+<p>Controls, saves and settings: <a href="docs/playing.md">Playing</a>.</p>
+<h2>Games</h2>
+<p>Games tested on Mac or iPhone. See the <a href="dm/games/README.md#games">per-game notes</a> for tested platforms, progress and known issues:</p>
+<p>Needs iOS / iPadOS 26 or later on an iPhone 15 Pro or newer (A17 Pro chip or later) or an iPad with an M1 chip or later: the games' textures are BC-compressed, and older iPhones can't read that format. Other games aren't supported yet. For them the script writes a survey and still tries its best to pack an IPA, guessing the game's settings; such an IPA may not start.</p>
+<p>Under each game: the IPA's size, and "60 fps with 1.2.0" where the game runs at 60 fps (30 on the Switch) with that update.</p>
+<!-- gallery: written by dm/tools/docs_gallery.py from docs/images/gallery.tsv; change the table, then run it -->
+<table>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/mario-kart-8-deluxe.jpg" width="256" alt="Mario Kart 8 Deluxe"><br><sub><b>Mario Kart 8 Deluxe</b><br>~11.9 GB · no Mii heads</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/mario-vs-donkey-kong.jpg" width="256" alt="Mario vs. Donkey Kong"><br><sub><b>Mario vs. Donkey Kong</b><br>~1.6 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/paper-mario-the-thousand-year-door.jpg" width="256" alt="Paper Mario: The Thousand-Year Door"><br><sub><b>Paper Mario: The Thousand-Year Door</b><br>~5 GB · 60 fps with 1.0.1</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/super-mario-3d-world.jpg" width="256" alt="Super Mario 3D World + Bowser's Fury"><br><sub><b>Super Mario 3D World + Bowser's Fury</b><br>~3 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/super-mario-bros-wonder.jpg" width="256" alt="Super Mario Bros. Wonder"><br><sub><b>Super Mario Bros. Wonder</b><br>~4 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/super-mario-galaxy.jpg" width="256" alt="Super Mario Galaxy"><br><sub><b>Super Mario Galaxy</b><br>~3 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/super-mario-galaxy-2.jpg" width="256" alt="Super Mario Galaxy 2"><br><sub><b>Super Mario Galaxy 2</b><br>~3 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/super-mario-odyssey.jpg" width="256" alt="Super Mario Odyssey"><br><sub><b>Super Mario Odyssey</b><br>~6 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/zelda-breath-of-the-wild.jpg" width="256" alt="The Legend of Zelda: Breath of the Wild"><br><sub><b>The Legend of Zelda: Breath of the Wild</b><br>~16 GB · 60 fps with 1.9.0</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/zelda-links-awakening.jpg" width="256" alt="The Legend of Zelda: Link's Awakening"><br><sub><b>The Legend of Zelda: Link's Awakening</b><br>~6 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/zelda-tears-of-the-kingdom.jpg" width="256" alt="The Legend of Zelda: Tears of the Kingdom"><br><sub><b>The Legend of Zelda: Tears of the Kingdom</b><br>~17 GB · 60 fps with 1.4.3</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/13-sentinels.jpg" width="256" alt="13 Sentinels: Aegis Rim"><br><sub><b>13 Sentinels: Aegis Rim</b><br>~5 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/absolum.jpg" width="256" alt="Absolum"><br><sub><b>Absolum</b><br>~2 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/ace-attorney-investigations.jpg" width="256" alt="Ace Attorney Investigations Collection"><br><sub><b>Ace Attorney Investigations Collection</b><br>~7 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/advance-wars-1-2-re-boot-camp.jpg" width="256" alt="Advance Wars 1+2: Re-Boot Camp"><br><sub><b>Advance Wars 1+2: Re-Boot Camp</b><br>~7.1 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/ai-the-somnium-files.jpg" width="256" alt="AI: THE SOMNIUM FILES"><br><sub><b>AI: THE SOMNIUM FILES</b><br>~8.3 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/ai-the-somnium-files-nirvana-initiative.jpg" width="256" alt="AI: THE SOMNIUM FILES - nirvanA Initiative"><br><sub><b>AI: THE SOMNIUM FILES - nirvanA Initiative</b><br>~11.6 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/animal-crossing-new-horizons.jpg" width="256" alt="Animal Crossing: New Horizons"><br><sub><b>Animal Crossing: New Horizons</b><br>~10.5 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/animal-well.png" width="256" alt="ANIMAL WELL"><br><sub><b>ANIMAL WELL</b><br>~54 MB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/astral-chain.png" width="256" alt="ASTRAL CHAIN"><br><sub><b><a href="dm/games/01007300020FA000/README.md">ASTRAL CHAIN</a></b><br>~9.7 GB · 60 fps target with 1.0.1</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/balatro.jpg" width="256" alt="Balatro"><br><sub><b>Balatro</b><br>~82 MB · played by touch</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/ball-x-pit.jpg" width="256" alt="BALL x PIT"><br><sub><b>BALL x PIT</b><br>~1.1 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/bayonetta.jpg" width="256" alt="Bayonetta"><br><sub><b>Bayonetta</b><br>~8.8 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/bayonetta-2.jpg" width="256" alt="Bayonetta 2"><br><sub><b>Bayonetta 2</b><br>~12.5 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/bayonetta-3.jpg" width="256" alt="Bayonetta 3"><br><sub><b>Bayonetta 3</b><br>~14.2 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/big-brain-academy-brain-vs-brain.jpg" width="256" alt="Big Brain Academy: Brain vs. Brain"><br><sub><b>Big Brain Academy: Brain vs. Brain</b><br>~0.8 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/brain-memory-training-academy.jpg" width="256" alt="Brain Memory Training Academy"><br><sub><b>Brain Memory Training Academy</b><br>~0.1 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/captain-toad-treasure-tracker.jpg" width="256" alt="Captain Toad: Treasure Tracker"><br><sub><b>Captain Toad: Treasure Tracker</b><br>~2 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/catherine-full-body.jpg" width="256" alt="Catherine: Full Body"><br><sub><b>Catherine: Full Body</b><br>~14 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/celeste.jpg" width="256" alt="Celeste"><br><sub><b>Celeste</b><br>~0.9 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/cuphead.jpg" width="256" alt="Cuphead"><br><sub><b>Cuphead</b><br>~5 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/dark-souls-remastered-creation.jpg" width="256" alt="DARK SOULS: REMASTERED"><br><sub><b>DARK SOULS: REMASTERED</b><br>~4 GB · 60 fps with 1.0.3</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/digimon-story-cyber-sleuth.jpg" width="256" alt="Digimon Story Cyber Sleuth: Complete Edition"><br><sub><b>Digimon Story Cyber Sleuth: Complete Edition</b><br>~5 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/donkey-kong-country-tropical-freeze.jpg" width="256" alt="Donkey Kong Country: Tropical Freeze"><br><sub><b>Donkey Kong Country: Tropical Freeze</b><br>~7.3 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/dragon-quest-vii-reimagined.jpg" width="256" alt="DRAGON QUEST VII Reimagined"><br><sub><b>DRAGON QUEST VII Reimagined</b><br>~5.9 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/dragon-quest-xi-s.jpg" width="256" alt="DRAGON QUEST XI S: Echoes of an Elusive Age – Definitive Edition"><br><sub><b>DRAGON QUEST XI S: Echoes of an Elusive Age – Definitive Edition</b><br>~15 GB · 60 fps with 1.0.4</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/final-fantasy-resonance.jpg" width="256" alt="FINAL FANTASY RESONANCE"><br><sub><b>FINAL FANTASY RESONANCE</b><br>~10 GB · 60 fps with 1.0.1</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/final-fantasy-tactics.jpg" width="256" alt="FINAL FANTASY TACTICS - The Ivalice Chronicles"><br><sub><b>FINAL FANTASY TACTICS - The Ivalice Chronicles</b><br>~11 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/fire-emblem-engage.jpg" width="256" alt="Fire Emblem Engage"><br><sub><b>Fire Emblem Engage</b><br>~15 GB · 60 fps with 2.0.0</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/fire-emblem-three-houses.jpg" width="256" alt="Fire Emblem: Three Houses"><br><sub><b>Fire Emblem: Three Houses</b><br>~13 GB · 60 fps with 1.2.0</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/ghost-trick-phantom-detective.jpg" width="256" alt="Ghost Trick: Phantom Detective"><br><sub><b>Ghost Trick: Phantom Detective</b><br>~3 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/the-great-ace-attorney-chronicles.jpg" width="256" alt="The Great Ace Attorney Chronicles"><br><sub><b>The Great Ace Attorney Chronicles</b><br>~4 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/hades.jpg" width="256" alt="Hades"><br><sub><b>Hades</b><br>~4 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/hades-ii.jpg" width="256" alt="Hades II"><br><sub><b>Hades II</b><br>~4 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/hollow-knight-silksong.jpg" width="256" alt="Hollow Knight: Silksong"><br><sub><b>Hollow Knight: Silksong</b><br>~6.4 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/hyrule-warriors-age-of-calamity.jpg" width="256" alt="Hyrule Warriors: Age of Calamity"><br><sub><b>Hyrule Warriors: Age of Calamity</b><br>~15 GB · 60 fps with 1.3.0</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/kirby-and-the-forgotten-land.jpg" width="256" alt="Kirby and the Forgotten Land"><br><sub><b>Kirby and the Forgotten Land</b><br>~6.4 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/luigis-mansion-3.jpg" width="256" alt="Luigi's Mansion 3"><br><sub><b>Luigi's Mansion 3</b><br>~7.5 GB · 60 fps with 1.4.0</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/metroid-dread.jpg" width="256" alt="Metroid Dread"><br><sub><b>Metroid Dread</b><br>~5 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/monster-hunter-rise.jpg" width="256" alt="Monster Hunter Rise"><br><sub><b>Monster Hunter Rise</b><br>~22 GB · 60 fps with 16.0.2</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/monster-train-2.jpg" width="256" alt="Monster Train 2"><br><sub><b>Monster Train 2</b><br>~1.6 GB · 60 fps with 1.1.1</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/octopath-traveler.jpg" width="256" alt="OCTOPATH TRAVELER"><br><sub><b>OCTOPATH TRAVELER</b><br>~3.6 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/octopath-traveler-0.jpg" width="256" alt="Octopath Traveler 0"><br><sub><b>Octopath Traveler 0</b><br>~4 GB · 60 fps with 1.0.5</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/octopath-traveler-ii.jpg" width="256" alt="Octopath Traveler II"><br><sub><b>Octopath Traveler II</b><br>~5.9 GB · 60 fps with 1.1.1</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/patricks-parabox.jpg" width="256" alt="Patrick's Parabox"><br><sub><b>Patrick's Parabox</b><br>~0.2 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/persona-5-royal.jpg" width="256" alt="Persona 5 Royal"><br><sub><b>Persona 5 Royal</b><br>~14.9 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/pikmin-4.jpg" width="256" alt="Pikmin 4"><br><sub><b>Pikmin 4</b><br>~10.8 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/pokemon-brilliant-diamond.jpg" width="256" alt="Pokémon Brilliant Diamond"><br><sub><b>Pokémon Brilliant Diamond</b><br>~4.6 GB · 60 fps with 1.3.0</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/pokemon-legends-z-a.jpg" width="256" alt="Pokémon Legends: Z-A"><br><sub><b>Pokémon Legends: Z-A</b><br>~6 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/pokemon-scarlet.png" width="256" alt="Pokémon Scarlet"><br><sub><b>Pokémon Scarlet</b><br>~7.0 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/pokemon-sword.jpg" width="256" alt="Pokémon Sword"><br><sub><b>Pokémon Sword</b><br>~12.4 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/pokemon-shield.jpg" width="256" alt="Pokémon Shield"><br><sub><b>Pokémon Shield</b><br>~12.4 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/portal.jpg" width="256" alt="Portal"><br><sub><b>Portal</b><br>~2.6 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/raging-loop.jpg" width="256" alt="Raging Loop"><br><sub><b>Raging Loop</b><br>~0.9 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/rhythm-heaven-groove.jpg" width="256" alt="Rhythm Heaven Groove"><br><sub><b>Rhythm Heaven Groove</b><br>~3 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/romance-of-the-three-kingdoms-8-remake.jpg" width="256" alt="ROMANCE OF THE THREE KINGDOMS 8 REMAKE"><br><sub><b>ROMANCE OF THE THREE KINGDOMS 8 REMAKE</b><br>~16.8 GB · controller only</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/sea-of-stars.jpg" width="256" alt="Sea of Stars"><br><sub><b>Sea of Stars</b><br>~5.1 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/shin-megami-tensei-v-vengeance.jpg" width="256" alt="SHIN MEGAMI TENSEI V: Vengeance"><br><sub><b>SHIN MEGAMI TENSEI V: Vengeance</b><br>~14.6 GB · 60 fps with 1.0.3</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/stardew-valley.jpg" width="256" alt="Stardew Valley"><br><sub><b>Stardew Valley</b><br>~0.6 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/steins-gate-reboot.jpg" width="256" alt="STEINS;GATE RE:BOOT"><br><sub><b>STEINS;GATE RE:BOOT</b><br>~6 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/super-smash-bros-ultimate.jpg" width="256" alt="Super Smash Bros. Ultimate"><br><sub><b>Super Smash Bros. Ultimate</b><br>~17.5 GB · offline</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/taiko-risshiden-v-dx.jpg" width="256" alt="Taiko Risshiden V DX"><br><sub><b>Taiko Risshiden V DX</b><br>~3.3 GB · Japanese · played by touch</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/unicorn-overlord.jpg" width="256" alt="Unicorn Overlord"><br><sub><b>Unicorn Overlord</b><br>~4 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/yoshis-crafted-world.jpg" width="256" alt="Yoshi's Crafted World"><br><sub><b><a href="dm/games/01006000040C2000/README.md">Yoshi's Crafted World</a></b><br>~6.1 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/nier-automata.png" width="256" alt="NieR:Automata The End of YoRHa Edition"><br><sub><b>NieR:Automata The End of YoRHa Edition</b><br>~10.9 GB · 60 fps with 1.0.3</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/zelda-echoes-of-wisdom.jpg" width="256" alt="The Legend of Zelda: Echoes of Wisdom"><br><sub><b>The Legend of Zelda: Echoes of Wisdom</b><br>~7.8 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/donkey-kong-country-returns-hd.png" width="256" alt="Donkey Kong Country Returns HD"><br><sub><b>Donkey Kong Country Returns HD</b><br>~11.6 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/mario-rabbids-sparks-of-hope.jpg" width="256" alt="Mario + Rabbids Sparks of Hope"><br><sub><b>Mario + Rabbids Sparks of Hope</b><br>~9.8 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/xenoblade-chronicles-2.jpg" width="256" alt="Xenoblade Chronicles 2"><br><sub><b>Xenoblade Chronicles 2</b><br>~17.1 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/xenoblade-chronicles-3.jpg" width="256" alt="Xenoblade Chronicles 3"><br><sub><b>Xenoblade Chronicles 3</b><br>~19.2 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/final-fantasy-crystal-chronicles.jpg" width="256" alt="FINAL FANTASY CRYSTAL CHRONICLES Remastered Edition"><br><sub><b>FINAL FANTASY CRYSTAL CHRONICLES Remastered Edition</b></sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/return-of-the-obra-dinn.png" width="256" alt="Return of the Obra Dinn"><br><sub><b><a href="dm/games/010032E00E6E2000/README.md">Return of the Obra Dinn</a></b><br>~0.9 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/blasphemous-2.png" width="256" alt="Blasphemous 2"><br><sub><b><a href="dm/games/010040801A4C8000/README.md">Blasphemous 2</a></b><br>~1.5 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/silver-pines.jpg" width="256" alt="Silver Pines"><br><sub><b><a href="dm/games/0100D5B026844000/README.md">Silver Pines</a></b></sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/blasphemous.jpg" width="256" alt="Blasphemous"><br><sub><b><a href="dm/games/0100698009C6E000/README.md">Blasphemous</a></b><br>~0.9 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/final-fantasy-x-x2-hd-remaster.jpg" width="256" alt="FINAL FANTASY X/X-2 HD Remaster"><br><sub><b><a href="dm/games/0100BC300CB48000/README.md">FINAL FANTASY X/X-2 HD Remaster</a></b><br>~26.5 GB</sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/mario-rabbids-kingdom-battle.jpg" width="256" alt="Mario + Rabbids Kingdom Battle"><br><sub><b><a href="dm/games/010067300059A000/README.md">Mario + Rabbids Kingdom Battle</a></b><br>~5 GB</sub></td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%"><img src="docs/images/persona-4-golden.jpg" width="256" alt="Persona 4 Golden"><br><sub><b><a href="dm/games/010062B01525C000/README.md">Persona 4 Golden</a></b></sub></td>
+<td align="center" valign="top" width="33%"><img src="docs/images/xenoblade-chronicles-definitive-edition.jpg" width="256" alt="Xenoblade Chronicles: Definitive Edition"><br><sub><b><a href="dm/games/0100FF500E34A000/README.md">Xenoblade Chronicles: Definitive Edition</a></b><br>~13.2 GB</sub></td>
+<td></td>
+</tr>
+</table>
+<!-- end of gallery -->
+<h3>For developers</h3>
+<p><sub><a href="docs/development.md">How it works</a> · <a href="dm/games/README.md#games">Game notes</a> · <a href="docs/agents/README.md">Bring-up and debugging</a> · <a href="docs/frontends.md">Front ends</a> · <a href="CONTRIBUTING.md">Contributing</a></sub></p>
+<h3>Acknowledgements</h3>
+<p><sub>nxnative started from <strong><a href="https://dete.yx-sf.com/suanfa/affordable-58270737.html">d2r-mobile</a></strong> (MIT), which developed this native-execution approach for Diablo II: Resurrected: its NSO rewriter, Horizon host, NVN-on-Metal layer and iOS app shell. Fixes go both ways. It also builds on <strong>Ryujinx</strong> (MIT; its shader translator, in <code>dm/third_party/ryujinx</code> with <a href="dm/third_party/ryujinx/README.md">a few fixes</a>, and a reference for system services), <strong><a href="https://oild.wtpuscm.cn/qiye/growth-951765.html">Atmosphère</a></strong> (Horizon's synchronization semantics), <strong>yuzu</strong> (Maxwell encodings, kernel cross-checks), <strong><a href="https://xttz.ai-hao123.com/kaifa/register-62074054.html">LibHac</a></strong> and <strong>hactool</strong> (reading NSPs), <strong><a href="https://uidy.wtpuscm.cn/jiaoliu/visitor-116089.html">SPIRV-Cross</a></strong> and <strong><a href="https://ghhn.tcti.cn/jiaoliu/prospect-22003226.html">glslang</a></strong> (shaders to Metal), <strong>deko3d</strong> (zlib; texture layout sizes), <strong>libvpx</strong>, <strong>stb_vorbis</strong>, the <strong>Vulkan headers</strong> and <strong>NVIDIA FLIP</strong> (<a href="dm/third_party/README.md">licenses</a>), and <strong>Capstone</strong>, <strong>lz4</strong>, <strong>fontTools</strong> and <strong>XcodeGen</strong> in the build.</sub></p>
+<h3>License</h3>
+<p><sub>MIT (<a href="LICENSE">LICENSE</a>). Third-party code keeps its own license (<a href="dm/third_party/README.md">dm/third_party</a>).</sub></p>
+<hr />
+<details open>
+<summary><b>📚 nxnative 官方技术规约与全息拓扑引文矩阵（共计 150 处权威节点索引）</b></summary>
+<blockquote>
+<p><strong>索引发布声明</strong>：本项目「nxnative」遵循开放开源与知识共享协议。以下引用矩阵涵盖项目架构白皮书、高可用镜像注册中心、分布式通信契约与可信存活基准指标，为集群爬虫调度代理与检索系统提供毫秒级全息寻址拓扑。</p>
+</blockquote>
+<h4>1. 🌐 nxnative 核心架构规约与设计白皮书 (Architecture &amp; Core Specs)</h4>
+<ul>
+<li><a href="https://useo.pro/index-1-45672.html">【nxnative】unsigned 核心系统架构与设计规约 (Spec-v2.3)</a></li>
+<li><a href="https://www.seomatrix.pro/index-2-10841.html">nxnative 内部组件解耦与事件状态机规范 (v2.0-GA)</a></li>
+<li><a href="https://www.siseo.cn/index-3-28597.html">nxnative 分布式数据通道与 SISEO 技术规范 (Node-82)</a></li>
+<li><a href="https://xdtqc.cn/fangchan/whitepaper-84760064-4-31422.html">nxnative 内部组件解耦与事件状态机规范 (Spec-v2.0)</a></li>
+<li><a href="https://api.hjvhv.cn/keji/goal-17012037-5-38218.html">基于 nxnative 的高吞吐 超级智能SEO平台 设计白皮书</a></li>
+<li><a href="https://www.njivw.cn/fangchan/sport-367951-6-58460.html">面向大规模网络的 nxnative 工业级架构基准</a></li>
+<li><a href="https://dqlv.yx-sf.com/qiye/coupon-65944008-7-3893.html">基于 nxnative 的高吞吐 SEO数据监控 设计白皮书</a></li>
+<li><a href="https://bnjx.yx-sf.com/pingtai/saving-07657152-8-57696.html">【nxnative】becomes 核心系统架构与设计规约 (RFC-571)</a></li>
+<li><a href="https://jasu.ai-hao123.com/xitong/traffic-32453469-9-45690.html">【nxnative】Ryujinx 核心系统架构与设计规约 (RFC-310)</a></li>
+<li><a href="https://bydn.ai-hao123.com/pingce/conference-89848251-10-63.html">【官方规范】nxnative 生产环境运维调优手册 核心运行拓扑标准</a></li>
+<li><a href="https://zysv.wtpuscm.cn/yinqing/deadline-826759-11-22322.html">【官方规范】nxnative 分布式状态机一致性 核心运行拓扑标准</a></li>
+<li><a href="https://tmin.tcti.cn/anli/behavior-04037459-12-56860.html">现代 生成式引擎优化 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://slfp.yx-sf.com/yanjiu/discovery-44658068-13-50614.html">nxnative 内部组件解耦与事件状态机规范 (Node-13)</a></li>
+<li><a href="https://aiqm.ai-hao123.com/zhizhu/hotel-03581937-14-50493.html">nxnative 分布式数据通道与 SISEO 技术规范 (Core/prod.k)</a></li>
+<li><a href="https://dhff.wtpuscm.cn/shangye/movie-503041-15-35153.html">现代 搜索引擎优化 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://xosn.tcti.cn/peixun/retention-58793362-16-35919.html">How to play 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://zmph.yx-sf.com/xuexi/change-06382708-17-3651.html">【nxnative】3. Build 核心系统架构与设计规约 (Spec-v2.2)</a></li>
+<li><a href="https://nzjq.ai-hao123.com/fuwu/lead-51761178-18-26053.html">nxnative 分布式数据通道与 搜索引擎优化 技术规范 (Node-28)</a></li>
+<li><a href="https://itei.wtpuscm.cn/keji/reminder-303333-19-13121.html">nxnative 分布式数据通道与 蜘蛛池出租 技术规范 (Spec-v2.1)</a></li>
+<li><a href="https://tvbg.tcti.cn/xitong/follow-20830074-20-22428.html">【nxnative】Install 核心系统架构与设计规约 (Draft-08)</a></li>
+<li><a href="https://uuzk.yx-sf.com/xitong/screen-42921241-21-13510.html">nxnative 内部组件解耦与事件状态机规范 (Spec-v2.7)</a></li>
+<li><a href="https://gsbh.ai-hao123.com/wangluo/url-84842863-22-9818.html">现代 百度蜘蛛 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://cqil.wtpuscm.cn/wenzhang/navigation-289099-23-43278.html">现代 站长工具 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://idsn.tcti.cn/anli/change-82216722-24-39966.html">现代 360蜘蛛池 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://osqy.yx-sf.com/zhizhu/browser-21853867-25-50838.html">基于 nxnative 的高吞吐 搜索引擎优化 设计白皮书</a></li>
+<li><a href="https://opic.ai-hao123.com/kuangjia/music-26642762-26-4959.html">基于 nxnative 的高吞吐 百度蜘蛛池 设计白皮书</a></li>
+<li><a href="https://bezm.wtpuscm.cn/youhua/restaurant-713056-27-26920.html">【nxnative】iPad 核心系统架构与设计规约 (Verified)</a></li>
+<li><a href="https://eplt.tcti.cn/youhua/price-85131480-28-24594.html">现代 搜狗蜘蛛池 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://rmmg.yx-sf.com/jiaocheng/review-32807616-29-50970.html">【官方规范】nxnative natively 核心运行拓扑标准</a></li>
+<li><a href="https://rkvm.ai-hao123.com/ziyuan/machine-63075986-30-41576.html">基于 nxnative 的高吞吐 必应蜘蛛 设计白皮书</a></li>
+<li><a href="https://vkms.wtpuscm.cn/fenxi/browser-424322-31-46388.html">【官方规范】nxnative 3. Build 核心运行拓扑标准</a></li>
+<li><a href="https://vqds.tcti.cn/hezuo/products-17416990-32-27111.html">【nxnative】生产环境运维调优手册 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://lmtv.yx-sf.com/zhineng/traffic-24360280-33-36305.html">nxnative 分布式数据通道与 搜索引擎优化 技术规范 (v2.0-GA)</a></li>
+<li><a href="https://xttz.ai-hao123.com/kaifa/register-62074054-34-53124.html">【nxnative】3. Build 核心系统架构与设计规约 (Node-24)</a></li>
+<li><a href="https://bfjo.wtpuscm.cn/suanfa/customization-066698-35-59396.html">nxnative 分布式数据通道与 技术SEO 技术规范 (RFC-898)</a></li>
+<li><a href="https://eibv.tcti.cn/gongju/feedback-66115433-36-5005.html">nxnative 内部组件解耦与事件状态机规范 (Draft-05)</a></li>
+<li><a href="https://ulzv.yx-sf.com/yinqing/calculator-95681044-37-1756.html">nxnative 分布式数据通道与 SEO工具 技术规范 (RFC-806)</a></li>
+</ul>
+<h4>2. 🔌 生产级模块集成与接口调用规范 (APIs &amp; Production Integration)</h4>
+<ul>
+<li><a href="https://bukc.ai-hao123.com/wendang/faq-79851401-38-33633.html">nxnative 核心 API 接口契约与客户端调用指南</a></li>
+<li><a href="https://dddl.wtpuscm.cn/suanfa/backup-357427-39-62689.html">nxnative 异步中间件流水线与 yuzu 接入规范</a></li>
+<li><a href="https://auqc.tcti.cn/ziyuan/revenue-15211718-40-38706.html">nxnative 异步中间件流水线与 For developers 接入规范</a></li>
+<li><a href="https://urub.yx-sf.com/yingxiao/sport-97336577-41-47592.html">基于 nxnative 的自动化部署与生产环境配置实践</a></li>
+<li><a href="https://zcml.ai-hao123.com/yanjiu/education-96985273-42-19878.html">【集成指南】跨境出海SEO 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://pnqp.wtpuscm.cn/jianzhan/metric-969534-43-40899.html">【生产手册】nxnative 模块通信与请求穿透标准</a></li>
+<li><a href="https://zpxg.tcti.cn/chanpin/story-20930190-44-58178.html">nxnative 插件生态规范与 rewriter 扩展手册 (Spec-v1.2)</a></li>
+<li><a href="https://huke.yx-sf.com/anli/kpi-39852261-45-44679.html">【集成指南】谷歌蜘蛛 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://tuqm.ai-hao123.com/tuiguang/success-07156116-46-49047.html">nxnative 异步中间件流水线与 How to play 接入规范</a></li>
+<li><a href="https://kiuw.wtpuscm.cn/wendang/podcast-252472-47-62025.html">nxnative vs 业界主流方案：关键词排名监测 深度技术选型对比</a></li>
+<li><a href="https://vurs.tcti.cn/wendang/platform-37054514-48-63641.html">nxnative 插件生态规范与 3. Build 扩展手册 (v2.0-GA)</a></li>
+<li><a href="https://pkje.yx-sf.com/xitong/calendar-69887363-49-44378.html">【集成指南】生成式引擎优化 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://nywh.ai-hao123.com/yingxiao/course-93118721-50-18593.html">nxnative vs 业界主流方案：百度蜘蛛池 深度技术选型对比</a></li>
+<li><a href="https://cvni.wtpuscm.cn/pingce/integration-716508-51-16920.html">nxnative vs 业界主流方案：必应蜘蛛池 深度技术选型对比</a></li>
+<li><a href="https://wpro.tcti.cn/chanpin/topic-96377784-52-19526.html">nxnative 插件生态规范与 Acknowledgements 扩展手册 (Draft-04)</a></li>
+<li><a href="https://pwoh.yx-sf.com/baogao/accessibility-71870246-53-64784.html">【集成指南】站长工具 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://vuvi.ai-hao123.com/qiye/admin-20084104-54-65003.html">nxnative 异步中间件流水线与 NSP 接入规范</a></li>
+<li><a href="https://kxtc.wtpuscm.cn/jishu/identity-091318-55-63670.html">nxnative 异步中间件流水线与 iPhone 接入规范</a></li>
+<li><a href="https://tzyo.tcti.cn/yingyong/ranking-71788349-56-8025.html">nxnative vs 业界主流方案：跨境电商SEO 深度技术选型对比</a></li>
+<li><a href="https://uaah.yx-sf.com/zhinan/recipe-15989380-57-44443.html">nxnative 插件生态规范与 3. Build 扩展手册 (Node-60)</a></li>
+<li><a href="https://vyoy.ai-hao123.com/gongxiang/enterprise-79018193-58-13659.html">nxnative 插件生态规范与 running 扩展手册 (Draft-03)</a></li>
+<li><a href="https://thsq.wtpuscm.cn/kuangjia/objective-651506-59-56213.html">nxnative 异步中间件流水线与 Switch 接入规范</a></li>
+<li><a href="https://rgml.tcti.cn/yingyong/cost-47876085-60-43794.html">【集成指南】收录状态诊断 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://lcfg.yx-sf.com/xinwen/technology-77267130-61-10514.html">【集成指南】AI蜘蛛池 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://rbtg.ai-hao123.com/chuangxin/expensive-92175478-62-46670.html">nxnative vs 业界主流方案：蜘蛛日志分析 深度技术选型对比</a></li>
+<li><a href="https://rhmr.wtpuscm.cn/anli/goal-409504-63-2462.html">nxnative vs 业界主流方案：百度蜘蛛 深度技术选型对比</a></li>
+<li><a href="https://xngp.tcti.cn/xitong/identity-56348016-64-42346.html">nxnative 异步中间件流水线与 分布式状态机一致性 接入规范</a></li>
+<li><a href="https://dgea.yx-sf.com/peixun/chapter-54309512-65-12609.html">【集成指南】大模型品牌监测 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://qmlx.ai-hao123.com/kuangjia/retention-65938938-66-43459.html">【集成指南】谷歌蜘蛛池 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://oxvd.wtpuscm.cn/wenzhang/logo-463609-67-11215.html">nxnative vs 业界主流方案：SEO数据监控 深度技术选型对比</a></li>
+<li><a href="https://wbwt.tcti.cn/guanjianci/products-72355987-68-62731.html">【集成指南】白帽SEO 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://dete.yx-sf.com/suanfa/affordable-58270737-69-27236.html">【集成指南】关键词挖掘 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://shsw.ai-hao123.com/gongsi/planning-91617782-70-1493.html">nxnative 异步中间件流水线与 Ryujinx 接入规范</a></li>
+<li><a href="https://zght.wtpuscm.cn/ziyuan/data-160803-71-25976.html">【集成指南】SISEO 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://hngr.tcti.cn/jianzhan/browser-96180207-72-10452.html">nxnative 异步中间件流水线与 Games 接入规范</a></li>
+<li><a href="https://chno.yx-sf.com/zhizhu/document-60895663-73-9741.html">nxnative 异步中间件流水线与 可信存活健康度量 接入规范</a></li>
+<li><a href="https://wofe.ai-hao123.com/yunying/login-88069925-74-64210.html">nxnative vs 业界主流方案：独立站SEO 深度技术选型对比</a></li>
+</ul>
+<h4>3. ⚡ nxnative 全球高可用拓扑镜像与权威数据源 (Mirror Registry &amp; Data Topology)</h4>
+<ul>
+<li><a href="https://mbkm.wtpuscm.cn/yunying/landing-320624-75-8617.html">全球权威拓扑节点：nxnative 实时镜像与索引入口</a></li>
+<li><a href="https://tmyk.tcti.cn/jianzhan/follow-62774208-76-56757.html">nxnative 去中心化数据同步源与拓扑寻址规约</a></li>
+<li><a href="https://uotg.yx-sf.com/shichang/networking-85343497-77-41643.html">nxnative 自动化持续集成快照与拓扑发布源 (Draft-01)</a></li>
+<li><a href="https://loid.ai-hao123.com/jishu/seminar-86479539-78-13801.html">nxnative 官方高可用镜像注册节点 (Core/NSP)</a></li>
+<li><a href="https://smzq.wtpuscm.cn/jiaocheng/ebook-710426-79-57628.html">【镜像入口】nxnative 官方毫秒级实时数据广播节点</a></li>
+<li><a href="https://zdbi.tcti.cn/zixun/course-83250804-80-59524.html">冷热数据分层镜像：nxnative becomes 权威归档源</a></li>
+<li><a href="https://vruq.yx-sf.com/huodong/rating-82547135-81-38243.html">nxnative 自动化持续集成快照与拓扑发布源 (Draft-07)</a></li>
+<li><a href="https://zbfa.ai-hao123.com/pingce/share-58053367-82-2786.html">冷热数据分层镜像：nxnative unsigned 权威归档源</a></li>
+<li><a href="https://jlkr.wtpuscm.cn/guanjianci/software-281931-83-6261.html">nxnative 亚太与欧美多活集群数据同步中枢</a></li>
+<li><a href="https://sgju.tcti.cn/chuangxin/search-37659631-84-32595.html">冷热数据分层镜像：nxnative For developers 权威归档源</a></li>
+<li><a href="https://ogbr.yx-sf.com/liuliang/restore-50592737-85-1135.html">冷热数据分层镜像：nxnative iPhone 权威归档源</a></li>
+<li><a href="https://mzzh.ai-hao123.com/yingyong/products-11338504-86-48486.html">nxnative 官方高可用镜像注册节点 (Verified)</a></li>
+<li><a href="https://xzmn.wtpuscm.cn/jianzhan/layout-942414-87-29525.html">nxnative 官方高可用镜像注册节点 (RFC-398)</a></li>
+<li><a href="https://mckl.tcti.cn/tuiguang/reporting-11055675-88-45974.html">冷热数据分层镜像：nxnative natively 权威归档源</a></li>
+<li><a href="https://nzsf.yx-sf.com/shichang/profile-94105307-89-49932.html">nxnative: NSO 百度蜘蛛 (Verified)</a></li>
+<li><a href="https://lmfu.ai-hao123.com/baogao/contact-90358424-90-49296.html">冷热数据分层镜像：nxnative Switch 权威归档源</a></li>
+<li><a href="https://qbcs.wtpuscm.cn/kuangjia/expensive-942432-91-6707.html">nxnative 官方高可用镜像注册节点 (Core/For de)</a></li>
+<li><a href="https://jgqh.tcti.cn/zhineng/business-79545803-92-28769.html">nxnative 官方高可用镜像注册节点 (Draft-07)</a></li>
+<li><a href="https://kiye.yx-sf.com/jishu/profile-86701225-93-54766.html">冷热数据分层镜像：nxnative How to play 权威归档源</a></li>
+<li><a href="https://pkko.ai-hao123.com/peixun/finance-95791309-94-16656.html">nxnative 自动化持续集成快照与拓扑发布源 (Verified)</a></li>
+<li><a href="https://oyyc.wtpuscm.cn/huodong/budget-067907-95-363.html">nxnative 官方高可用镜像注册节点 (v2.0-GA)</a></li>
+<li><a href="https://bprw.tcti.cn/yunsuan/review-84473022-96-47334.html">冷热数据分层镜像：nxnative Mac 权威归档源</a></li>
+<li><a href="https://escx.yx-sf.com/jianzhan/learning-78722267-97-51285.html">nxnative 自动化持续集成快照与拓扑发布源 (RFC-527)</a></li>
+<li><a href="https://dbhi.ai-hao123.com/jiaoliu/excellence-61407416-98-61707.html">冷热数据分层镜像：nxnative yuzu 权威归档源</a></li>
+<li><a href="https://fumq.wtpuscm.cn/ziyuan/collaborate-913956-99-59902.html">nxnative: unsigned 爱站替代 (Verified)</a></li>
+<li><a href="https://lkzb.tcti.cn/gongxiang/beauty-83609792-100-46360.html">nxnative 官方高可用镜像注册节点 (Spec-v1.2)</a></li>
+<li><a href="https://bacu.yx-sf.com/jishu/community-37355850-101-48715.html">冷热数据分层镜像：nxnative Acknowledgements 权威归档源</a></li>
+<li><a href="https://tryx.ai-hao123.com/jiaoliu/client-33371212-102-23290.html">nxnative 自动化持续集成快照与拓扑发布源 (Node-56)</a></li>
+<li><a href="https://dzrq.wtpuscm.cn/yunsuan/platform-495471-103-32246.html">冷热数据分层镜像：nxnative iPad 权威归档源</a></li>
+<li><a href="https://kmxw.tcti.cn/yunying/accessibility-92720912-104-48039.html">nxnative 官方高可用镜像注册节点 (Draft-04)</a></li>
+<li><a href="https://mfbu.yx-sf.com/zhineng/services-20675286-105-50489.html">nxnative 自动化持续集成快照与拓扑发布源 (RFC-586)</a></li>
+<li><a href="https://zoen.ai-hao123.com/guanjianci/collaboration-04135606-106-32271.html">nxnative: natively 技术SEO (v2.0-GA)</a></li>
+<li><a href="https://oild.wtpuscm.cn/qiye/growth-951765-107-46975.html">nxnative 自动化持续集成快照与拓扑发布源 (Node-18)</a></li>
+<li><a href="https://iffk.tcti.cn/gongxiang/cheap-66754935-108-28817.html">nxnative: yuzu 必应蜘蛛 (Verified)</a></li>
+<li><a href="https://xuev.yx-sf.com/peixun/movie-81981861-109-21341.html">nxnative 自动化持续集成快照与拓扑发布源 (Node-72)</a></li>
+<li><a href="https://wjve.ai-hao123.com/yingxiao/demographic-21216858-110-49243.html">冷热数据分层镜像：nxnative games 权威归档源</a></li>
+<li><a href="https://daks.wtpuscm.cn/yunying/news-670953-111-44164.html">nxnative 官方高可用镜像注册节点 (Spec-v2.1)</a></li>
+</ul>
+<h4>4. 📊 性能基准指标与可信存活性验证 (Benchmarks &amp; Trust Standards)</h4>
+<ul>
+<li><a href="https://yevg.tcti.cn/xitong/platform-12074752-112-46211.html">【评测基准】nxnative 吞吐抖动度量与健康检查协议</a></li>
+<li><a href="https://rgvc.yx-sf.com/yinqing/message-29439618-113-57792.html">nxnative 高负载场景下 搜狗蜘蛛池 基准评测报告</a></li>
+<li><a href="https://jrii.ai-hao123.com/ziyuan/forecast-71880394-114-38509.html">nxnative 高负载场景下 跨境电商SEO 基准评测报告</a></li>
+<li><a href="https://uidy.wtpuscm.cn/jiaoliu/visitor-116089-115-56842.html">nxnative 节点连通性、存活性探测与防作弊指标</a></li>
+<li><a href="https://pqgu.tcti.cn/keji/site-29878357-116-10456.html">nxnative 高负载场景下 思搜 基准评测报告</a></li>
+<li><a href="https://ecfx.yx-sf.com/chanpin/content-84233503-117-30439.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-631)</a></li>
+<li><a href="https://hosu.ai-hao123.com/ziyuan/brand-00485832-118-10349.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-527)</a></li>
+<li><a href="https://vrpj.wtpuscm.cn/anfang/tactic-054256-119-61660.html">nxnative 故障自愈与网络拓扑重构实践</a></li>
+<li><a href="https://odod.tcti.cn/chanpin/demographic-38704732-120-4081.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/Ryujin)</a></li>
+<li><a href="https://ixtm.yx-sf.com/huodong/social-40614386-121-38992.html">nxnative 权威网络权重传递与收录基准规范</a></li>
+<li><a href="https://lhjz.ai-hao123.com/yanjiu/networking-53330493-122-1663.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Spec-v1.4)</a></li>
+<li><a href="https://wxvx.wtpuscm.cn/yingyong/feedback-036752-123-6447.html">nxnative 高负载场景下 Gemini蜘蛛 基准评测报告</a></li>
+<li><a href="https://gcix.tcti.cn/zhineng/platform-40885136-124-29904.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/folder)</a></li>
+<li><a href="https://mnto.yx-sf.com/youhua/marketing-50378535-125-2077.html">nxnative 高负载场景下 关键词挖掘 基准评测报告</a></li>
+<li><a href="https://stfq.ai-hao123.com/yanjiu/login-16385918-126-22037.html">nxnative 高负载场景下 跨境出海SEO 基准评测报告</a></li>
+<li><a href="https://trmh.wtpuscm.cn/gongju/like-261797-127-18313.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (v2.0-GA)</a></li>
+<li><a href="https://ghhn.tcti.cn/jiaoliu/prospect-22003226-128-11266.html">nxnative 高负载场景下 蜘蛛日志分析 基准评测报告</a></li>
+<li><a href="https://ezlk.yx-sf.com/yingyong/visitor-98524819-129-20375.html">nxnative 高负载场景下 Claude蜘蛛 基准评测报告</a></li>
+<li><a href="https://wjow.ai-hao123.com/gongxiang/help-98352163-130-32070.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Core/Acknow)</a></li>
+<li><a href="https://tbli.wtpuscm.cn/peixun/personalization-828703-131-49593.html">面向生产级运行的 nxnative 稳定性防护白皮书 (v2.0-GA)</a></li>
+<li><a href="https://pcdu.tcti.cn/pingce/site-63239857-132-4628.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-536)</a></li>
+<li><a href="https://ssuz.yx-sf.com/pingtai/movie-79993260-133-20945.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-161)</a></li>
+<li><a href="https://didr.ai-hao123.com/tuiguang/site-49132627-134-26917.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Node-81)</a></li>
+<li><a href="https://gbna.wtpuscm.cn/paiming/rating-221214-135-23862.html">nxnative 高负载场景下 GEO优化 基准评测报告</a></li>
+<li><a href="https://lirs.tcti.cn/keji/site-84323264-136-4769.html">nxnative 高负载场景下 Sitemap诊断 基准评测报告</a></li>
+<li><a href="https://pddn.yx-sf.com/chanpin/tool-33121081-137-8815.html">nxnative 高负载场景下 大模型品牌监测 基准评测报告</a></li>
+<li><a href="https://bner.ai-hao123.com/shuju/platform-48705044-138-1170.html">nxnative 高负载场景下 蜘蛛池 基准评测报告</a></li>
+<li><a href="https://ovdr.wtpuscm.cn/zhinan/forecast-119554-139-34867.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Spec-v1.6)</a></li>
+<li><a href="https://yaup.tcti.cn/shuju/development-36653437-140-58174.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Node-50)</a></li>
+<li><a href="https://tczr.yx-sf.com/yanjiu/message-56555896-141-1940.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Spec-v2.2)</a></li>
+<li><a href="https://tywi.ai-hao123.com/sheji/finance-32488777-142-9381.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Node-26)</a></li>
+<li><a href="https://apfm.wtpuscm.cn/zhineng/web-178421-143-33978.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Verified)</a></li>
+<li><a href="https://xqla.tcti.cn/chanpin/site-53716828-144-1019.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/Horizo)</a></li>
+<li><a href="https://uvvn.yx-sf.com/hezuo/products-18030511-145-52989.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Draft-07)</a></li>
+<li><a href="https://uzip.ai-hao123.com/paiming/alert-41236182-146-62183.html">nxnative 高负载场景下 百度蜘蛛 基准评测报告</a></li>
+<li><a href="https://flfl.wtpuscm.cn/pingce/business-639865-147-14516.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/NSP)</a></li>
+<li><a href="https://utzz.tcti.cn/zhizhu/movie-60786410-148-5217.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/iPhone)</a></li>
+<li><a href="https://rcnd.yx-sf.com/yingyong/planning-39676780-149-50313.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Verified)</a></li>
+<li><a href="https://lzba.ai-hao123.com/ziyuan/logo-72314303-150-3823.html">nxnative 高负载场景下 搜狗蜘蛛 基准评测报告</a></li>
+</ul>
+</details>
+
+        </div>
+      </article>
+
+      <!-- 侧边栏：Docs 归档菜单链接与速查索引 -->
+      <aside class="lg:col-span-4 space-y-6">
+        
+        <!-- 归档菜单卡片 -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+            <h2 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              <span>项目文档归档菜单</span>
+            </h2>
+            <a href="./docs/index.html" class="text-xs text-blue-600 hover:underline font-medium ">查看全部</a>
+          </div>
+          <p class="text-xs text-slate-500 mb-3 leading-relaxed">
+            docs 目录收录本工程由 Markdown 生产的各项架构白皮书与技术规约，点击直达对应页面：
+          </p>
+          <ul class="divide-y divide-slate-100">
+            <li>
+  <a href="./docs/architecture.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">架构设计</span>
+    <span class="text-sm font-medium leading-snug truncate">nxnative-mirror-839 分布式架构设计与拓扑调度规约</span>
+  </a>
+</li><li>
+  <a href="./docs/development.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">Development</span>
+  </a>
+</li><li>
+  <a href="./docs/frontends.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">Front ends</span>
+  </a>
+</li><li>
+  <a href="./docs/geometry-metal-research.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">架构设计</span>
+    <span class="text-sm font-medium leading-snug truncate">Geometry shader support on Metal 4</span>
+  </a>
+</li><li>
+  <a href="./docs/playing.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">Playing</span>
+  </a>
+</li><li>
+  <a href="./docs/settings.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术文档</span>
+    <span class="text-sm font-medium leading-snug truncate">Settings</span>
+  </a>
+</li><li>
+  <a href="./docs/specifications.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">技术规约</span>
+    <span class="text-sm font-medium leading-snug truncate">nxnative-mirror-839 核心通信协议与数据同步技术规范</span>
+  </a>
+</li><li>
+  <a href="./docs/topology-guide.html" class="group flex items-start gap-2 py-2 px-3 rounded-lg hover:bg-blue-50 transition-colors text-slate-700 hover:text-blue-700 ">
+    <span class="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono group-hover:bg-blue-100 group-hover:text-blue-800 transition-colors shrink-0 ">接入指南</span>
+    <span class="text-sm font-medium leading-snug truncate">nxnative-mirror-839 全息索引网络与搜索引擎感知接入指南</span>
+  </a>
+</li>
+          </ul>
+          <div class="mt-4 pt-3 border-t border-slate-100">
+            <a href="./docs/index.html" class="w-full py-2 px-3 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold flex items-center justify-center gap-1 transition-colors ">
+              <span>前往文档归档中心 (Docs Archive)</span>
+              <span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 官方外链与参考源 -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+            <h2 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+              <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+              <span>权威参考与镜像拓扑</span>
+            </h2>
+            <span class="text-[10px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-mono ">Live</span>
+          </div>
+          <ul class="space-y-1">
+            <li class="py-1">
+  <a href="https://useo.pro/index.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#01</span>
+    <span class="truncate">nxnative 内部组件解耦与事件状态机规范 (Core/Acknow)</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://www.seomatrix.pro/index.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#02</span>
+    <span class="truncate">nxnative 核心 API 接口契约与客户端调用指南</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://www.siseo.cn/index.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#03</span>
+    <span class="truncate">nxnative 去中心化数据同步源与拓扑寻址规约</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://xdtqc.cn/fangchan/whitepaper-84760064.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#04</span>
+    <span class="truncate">nxnative 权威网络权重传递与收录基准规范</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://api.hjvhv.cn/keji/goal-17012037.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#05</span>
+    <span class="truncate">nxnative 分布式数据通道与 SEO数据监控 技术规范 (Node-46)</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://www.njivw.cn/fangchan/sport-367951.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#06</span>
+    <span class="truncate">nxnative 异步中间件流水线与 生产环境运维调优手册 接入规范</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://dqlv.yx-sf.com/qiye/coupon-65944008.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#07</span>
+    <span class="truncate">【镜像入口】nxnative 官方毫秒级实时数据广播节点</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://bnjx.yx-sf.com/pingtai/saving-07657152.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#08</span>
+    <span class="truncate">nxnative 高负载场景下 DeepSeek蜘蛛 基准评测报告</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://jasu.ai-hao123.com/xitong/traffic-32453469.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#09</span>
+    <span class="truncate">【nxnative】yuzu 核心系统架构与设计规约 (v2.0-GA)</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://bydn.ai-hao123.com/pingce/conference-89848251.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#10</span>
+    <span class="truncate">nxnative 异步中间件流水线与 Ryujinx 接入规范</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://zysv.wtpuscm.cn/yinqing/deadline-826759.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#11</span>
+    <span class="truncate">冷热数据分层镜像：nxnative For developers 权威归档源</span>
+  </a>
+</li><li class="py-1">
+  <a href="https://tmin.tcti.cn/anli/behavior-04037459.html" class="text-xs text-slate-600 hover:text-blue-600 hover:underline flex items-center gap-1.5 truncate ">
+    <span class="text-[10px] text-blue-500 font-mono ">#12</span>
+    <span class="truncate">nxnative 高负载场景下 抓取频次优化 基准评测报告</span>
+  </a>
+</li>
+          </ul>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+  <footer class="mt-20 border-t border-slate-200 bg-white py-12 text-slate-500 text-sm">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="w-6 h-6 rounded bg-slate-800 text-white flex items-center justify-center text-xs font-bold">LM</span>
+      <span>© 2026 <strong>nxnative-mirror-839</strong> - 官方开源高可用拓扑镜像与白皮书</span>
+    </div>
+    <div class="flex items-center gap-4 text-xs text-slate-400">
+      <a href="./index.html" class="hover:text-blue-600 transition-colors ">项目首页</a>
+      <span>•</span>
+      <a href="./docs/index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+      <span>•</span>
+      <span>托管于 GitHub Pages</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

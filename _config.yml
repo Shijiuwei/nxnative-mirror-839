@@ -1,0 +1,5 @@
+title: "nxnative-mirror-839"
+description: "High availability mirror and network topology specifications for seedds/nxnative"
+theme: jekyll-theme-cayman
+plugins:
+  - jekyll-relative-links

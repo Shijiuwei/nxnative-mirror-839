@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geometry shader support on Metal 4 - nxnative-mirror-839 文档归档</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+      :root {
+        --color-primary: #2563eb;
+        --color-primary-hover: #1d4ed8;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.68;
+        color: #1e293b;
+      }
+      .markdown-body {
+        color: #1e293b;
+      }
+      .markdown-body h1 {
+        font-size: 2.25rem;
+        font-weight: 800;
+        margin-top: 1.8rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.6rem;
+        border-bottom: 2px solid #e2e8f0;
+        color: #0f172a;
+        line-height: 1.25;
+      }
+      .markdown-body h2 {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-top: 1.6rem;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.4rem;
+        border-bottom: 1px solid #f1f5f9;
+        color: #1e293b;
+      }
+      .markdown-body h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-top: 1.3rem;
+        margin-bottom: 0.6rem;
+        color: #334155;
+      }
+      .markdown-body p {
+        margin-top: 0.8rem;
+        margin-bottom: 0.8rem;
+        line-height: 1.7;
+      }
+      .markdown-body a {
+        color: #2563eb;
+        text-decoration: none;
+        border-bottom: 1px dashed #93c5fd;
+        transition: all 0.2s ease;
+      }
+      .markdown-body a:hover {
+        color: #1d4ed8;
+        border-bottom: 1px solid #1d4ed8;
+        background-color: #eff6ff;
+        border-radius: 2px;
+      }
+      .markdown-body ul, .markdown-body ol {
+        padding-left: 1.5rem;
+        margin-top: 0.6rem;
+        margin-bottom: 0.6rem;
+      }
+      .markdown-body ul {
+        list-style-type: disc;
+      }
+      .markdown-body ol {
+        list-style-type: decimal;
+      }
+      .markdown-body li {
+        margin-top: 0.25rem;
+        margin-bottom: 0.25rem;
+      }
+      .markdown-body pre {
+        background-color: #0f172a;
+        color: #e2e8f0;
+        padding: 1rem 1.2rem;
+        border-radius: 0.75rem;
+        overflow-x: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875rem;
+        margin: 1rem 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .markdown-body code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 0.875em;
+        padding: 0.15rem 0.35rem;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        border-radius: 0.35rem;
+        border: 1px solid #e2e8f0;
+      }
+      .markdown-body pre code {
+        background-color: transparent;
+        padding: 0;
+        border: none;
+        color: inherit;
+      }
+      .markdown-body blockquote {
+        margin: 1rem 0;
+        padding: 0.75rem 1.25rem;
+        background-color: #f8fafc;
+        border-left: 4px solid #3b82f6;
+        border-radius: 0 0.5rem 0.5rem 0;
+        color: #475569;
+      }
+      .markdown-body table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1.2rem 0;
+        display: block;
+        overflow-x: auto;
+      }
+      .markdown-body th, .markdown-body td {
+        border: 1px solid #cbd5e1;
+        padding: 0.6rem 1rem;
+        text-align: left;
+      }
+      .markdown-body th {
+        background-color: #f1f5f9;
+        font-weight: 600;
+      }
+      .markdown-body tr:nth-child(even) {
+        background-color: #f8fafc;
+      }
+      .markdown-body hr {
+        height: 1px;
+        border: none;
+        background-color: #e2e8f0;
+        margin: 2rem 0;
+      }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+  <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <a href="../index.html" class="flex items-center gap-2 group">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-bold text-sm shadow-sm group-hover:scale-105 transition-transform ">LM</span>
+        <span class="font-bold text-slate-900 tracking-tight text-lg group-hover:text-blue-600 transition-colors ">nxnative-mirror-839</span>
+      </a>
+      <span class="hidden md:inline-block text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-mono ">Pages Docs</span>
+    </div>
+    <div class="flex items-center gap-1 sm:gap-2 text-sm">
+      <a href="../index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-slate-600 hover:text-blue-600 hover:bg-slate-50 font-medium ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>首页 (README)</span>
+      </a>
+      <a href="./index.html" class="px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 text-blue-600 bg-blue-50 font-semibold ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        <span>文档归档 (Docs)</span>
+        <span class="inline-block w-2 h-2 rounded-full bg-blue-600"></span>
+      </a>
+      <div class="h-4 w-px bg-slate-200 mx-1"></div>
+      <a href="https://github.com/shijiuwei/nxnative-mirror-839" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        <span class="hidden sm:inline">GitHub</span>
+      </a>
+      <a href="https://github.com/shijiuwei/nxnative-mirror-839/wiki" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1.5 ">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="hidden sm:inline">Wiki</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+  <!-- 面包屑与顶部导航 -->
+  <header class="bg-white border-b border-slate-200 py-6 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2 font-medium">
+        <a href="../index.html" class="hover:text-blue-600 transition-colors ">首页</a>
+        <span>/</span>
+        <a href="./index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+        <span>/</span>
+        <span class="text-slate-800 font-semibold">架构设计</span>
+      </nav>
+      <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Geometry shader support on Metal 4</h1>
+        <a href="./index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors ">
+          <span>&larr; 返回文档归档菜单</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体正文区域 -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 py-10 flex-1 w-full">
+    <article class="bg-white p-6 sm:p-12 rounded-2xl shadow-sm border border-slate-200">
+      <div class="markdown-body">
+        <h1>Geometry shader support on Metal 4</h1>
+<p>Research and implementation checked on 2026-10-23 against Apple documentation, the installed Xcode SDK, this worktree, and AI: THE SOMNIUM FILES. The implementation now has GPU readback tests; the initial compilation probe described below predates it.</p>
+<h2>Implemented compute path</h2>
+<p>The offline builder keeps the existing slice-writer fold and builds other geometry shaders as compute kernels, with five input-topology variants and an output-reader vertex function. Selection uses shader metadata and the NVN draw topology, with no game IDs or shader-key rules. Each vertex library also contains a rasterizer-discard capture entry. This runs native vertex fetching, including instance divisors and the host's existing format conversions, and writes a fixed 144-word record: position, point size, clip distances, layer, viewport and 32 generic attributes. Separately bound VS and GS programs therefore need no precomputed pair table.</p>
+<p>Replay captures the VS once per unique vertex and instance, dispatches the GS using logical NVN stage 2 resources, compacts emitted strips into ordered lists, and draws the output through the original fragment shader. Depth conversion occurs in the final vertex reader. Each input primitive, instance and GS invocation has its own bounded output region. Empty <code>EndPrimitive</code> operations are ignored, short strips have room for their restart markers, and output beyond the declared vertex maximum is bounded. The compactor preserves strip winding and the last vertex of each primitive.</p>
+<p><code>dm/gfx/tests/t_geometry.m</code> checks primitive assembly, strip compaction, native capture, indexed and indirect replay, restart, base vertex/instance, multiple GS invocations, and a draw exceeding the previous 4 MiB arena allocation. With the external AI shader cache passed as its argument, it additionally checks the generated capture entry and all three translated GS kernels against numeric expectations. On Apple M4 Pro, <strong>498 checks passed with Metal API validation enabled</strong>. The vertex-binding regression passed 43 checks and the draw-skip regression passed 38. All <strong>13,057 AI shaders</strong> built for Mac and iOS, including the previously failing three geometry shaders; the profile's chain header, constant-buffer guards and extents were regenerated and the Mac host rebuilt. The changed Metal replay translation unit also compiled against the iOS SDK.</p>
+<p>A 90-second Mac run reached the title screen at 60 fps with no <code>[RED]</code> diagnostics. Its final <code>CRASH sig=14</code> is the test harness's time limit, not a game failure. The run used a separate test save folder. Evidence: <code>run/geometry-boot.log</code>, <code>geometry-build/boot-3000.png</code>, <code>geometry-build/full-build.log</code> and <code>geometry-build/test-results.log</code> under the game's work folder.</p>
+<p>Current limits are explicit: GS transform feedback and tessellation combinations are rejected; triangle-strip adjacency, quad strips and polygons are not assembled. Geometry storage-buffer addresses sit in the NVN driver table at c0 <code>0x410</code> (NieR:Automata's index-build shaders; addresses carried in guest uniform buffers use the existing binding path). Provoking-vertex mode, GS-written primitive IDs, viewport-index outputs and multiple output streams are not validated. Indirect draws, and indexed draws whose indices or vertex streams a write in the same submission covers, wait for a coherent CPU snapshot for assembly; compaction uses blocked SIMD prefix-scan stages, and a run of geometry draws with only state between them is encoded together (<a href="reference/rendering.md#geometry-shader-draws-encoded-a-run-at-a-time">Geometry-shader draws encoded a run at a time</a>). Passthrough geometry shaders emit their input primitive (<a href="reference/shaders.md#passthrough-geometry-shaders">Passthrough geometry shaders</a>). Scratch is capped at 256 MiB and input counts at 4,194,304, with a red diagnostic instead of truncation. Other games and iOS device execution are unvalidated. AI's opening did not previously issue these GS draws, so a successful opening alone cannot establish their in-game appearance or performance.</p>
+<p>The external build and test artifacts are under <code>010089B00D09C000-work/geometry-build/</code> beside the game's NSPs. To repeat the GPU tests, build <code>t_geometry</code> with <code>GAME=010089B00D09C000</code>, then run it with the current <code>cache/b-&lt;chain&gt;</code> directory as its optional first argument. No extracted shader code is stored in the repository.</p>
+<h2>Conclusion</h2>
+<p>General geometry shader emulation is feasible. A mesh pipeline can keep expansion inside a render pass; compute expansion followed by an ordinary draw is a more explicit implementation with temporary buffers. Neither is a switch that makes the existing geometry-stage SPIR-V compile unchanged. The mesh route replaces the vertex stage too, and therefore needs the vertex and geometry programs connected through a new translation ABI. Keep the existing proven slice-writer fold as an optimization. These are engineering conclusions from the interfaces and current implementation below.</p>
+<p><strong>The implementation uses the compute route.</strong> The vendored translator already lowers GS to compute and generates a vertex function to read its output. Native VS capture supplies an independent-stage ABI. The original isolated probe established compilation feasibility; the GPU validation above now establishes the tested output semantics. Mesh shaders remain a potential optimization.</p>
+<h2>AI: THE SOMNIUM FILES evidence</h2>
+<p>The registered profile contains exactly three geometry keys. Existing build logs fail these with an <code>unknown</code> MSL stage declaration. The profile maps the following effects; candidate vertex keys come from adjacent entries of the same Unity shader, not a captured runtime binding. <a href="../dm/games/010089B00D09C000/shader_map.tsv">Shader inventory</a>, <a href="development.md">existing bring-up observations</a>.</p>
+<table><thead><tr><th>GS key</th><th>Effect</th><th>Body and declared output</th><th>Candidate VS</th></tr></thead><tbody>
+<tr><td><code>1b378c5c014e3a32</code></td><td><code>Hidden/DepthOfField/BokehSplatting</code></td><td>Reads input vertex 0, expands its screen position to a four-vertex triangle strip; maximum 4, one invocation</td><td><code>ba2512f7f6973541</code></td></tr>
+<tr><td><code>d57cdb168fdf6927</code></td><td><code>Hidden/Dof/DX11Dof</code></td><td>Same expansion math as the first, with input varying locations 0 and 1 exchanged; maximum 4, one invocation</td><td><code>771d597a6eb545aa</code></td></tr>
+<tr><td><code>2341c1be4fcbf690</code></td><td><code>UCLA Game Lab/Wireframe/Single-Sided</code></td><td>Reads all three positions, computes screen-space edge distances, emits three vertices in input order; maximum 3, one invocation</td><td><code>ce9cbd7dca9fda74</code></td></tr>
+</tbody></table>
+<p>The output maxima and invocation counts were read from shader headers. Input topology is supplied by the translator accessor: the probe selected points for the bokeh shaders and triangles for wireframe, consistent with their bodies. These are not independently captured NVN draw topologies. Wireframe cannot be implemented by simply dropping the GS: its fragment inputs depend on the other two vertices. The bokeh shaders actually expand geometry and also fail the existing layer-only fold.</p>
+<p>Probe artifacts remain beside the game, outside the repository:</p>
+<p><code>/Volumes/T7/nsp/AI THE SOMNIUM FILES/010089B00D09C000-work/geometry-probe/</code></p>
+<p>This contains <code>Program.cs</code>, <code>Probe.csproj</code>, <code>translation.log</code>, <code>compile-results.json</code>, native GS GLSL, compute/passthrough SPIR-V and MSL, and Mac/iOS libraries. The small C# probe references the pinned binaries in this worktree's <code>dmsh_xlate_bin</code>; it does not rebuild or replace the production translator. It reads package records directly and uses float attribute defaults and deliberately separate helper/resource bindings. It is not the production reflection or binding ABI.</p>
+<p>Validation: nine generated programs (three VS kernels, three GS kernels, three output-reader vertex functions) compiled and linked for each platform: <strong>18 successful metallibs, zero failed final compile/link steps</strong>. The final probe uses fresh translator contexts for each translation. Reusing a context first for native GS and then compute produced a translator warning and different output; that preliminary result was replaced. SPIRV-Cross uses the repository's MSL 2.3/native texture-buffer flags; Metal compilation uses its Mac/iOS flags. No pipeline creation, dispatch, pixel comparison, or iPhone execution was performed. Existing bring-up documentation says none of these GS effects was drawn in the tested opening; compiling them does not establish a visible improvement there.</p>
+<h2>Existing implementation to reuse</h2>
+<p><a href="../dm/third_party/ryujinx/src/Ryujinx.Graphics.Shader/Translation/TranslatorContext.cs"><code>TranslatorContext.Translate(asCompute: true)</code></a> activates <a href="../dm/third_party/ryujinx/src/Ryujinx.Graphics.Shader/Translation/Transforms/VertexToCompute.cs"><code>VertexToCompute</code></a> and <a href="../dm/third_party/ryujinx/src/Ryujinx.Graphics.Shader/Translation/Transforms/GeometryToCompute.cs"><code>GeometryToCompute</code></a>. Connect the stages with <code>SetNextStage</code> and <code>SetVertexOutputMapForGeometryAsCompute</code>; <code>GenerateVertexPassthroughForCompute</code> supplies the final vertex reader. The current <a href="../dm/gfx/tools/dmsh_xlate/Program.cs">offline wrapper</a> calls only ordinary <code>Translate()</code>.</p>
+<p>The compute lowering already writes output to fixed regions per input primitive and GS invocation. <code>EmitVertex</code> stores attributes and indices; <code>EndPrimitive</code> stores restart markers, and the emitter fills unused index positions with restart markers. This preserves an ordered layout without a global atomic append cursor. It still needs host allocation and output-topology handling. <a href="../dm/third_party/ryujinx/src/Ryujinx.Graphics.Shader/Translation/ResourceReservations.cs"><code>ResourceReservations</code></a>, <a href="../dm/third_party/ryujinx/src/Ryujinx.Graphics.Shader/VertexInfoBuffer.cs"><code>VertexInfoBuffer</code></a>, and <a href="../dm/third_party/ryujinx/src/Ryujinx.Graphics.Shader/Translation/EmitterContext.cs"><code>EmitterContext</code></a> define the auxiliary binding/layout contract. The default compute local size is 32×32×1; validate pipeline limits and occupancy before retaining it.</p>
+<h2>Original implementation plan and remaining coverage</h2>
+<ol>
+<li>Add explicit offline variants and reflection for VS-as-compute, GS-as-compute, and the output reader. Include input topology, invocation count, maximum output, interface strides, helper bindings, and logical NVN stage in metadata. Solve VS/GS interface selection for separately bound programs: the current build translates stages independently, while the existing GS lowering consumes its VS output map. A canonical interface or offline compatible-pair variants are design choices; runtime compilation is not available.</li>
+<li>Extend host resource encoding for logical geometry stage 2 while executing a Metal compute function. <code>encode_args</code> already accepts an NVN stage, but <code>c0_ssbo_base</code> currently supports only VS, FS, and CS. Do not accidentally source GS uniforms from compute stage 5. Supply helper buffers and vertex-format decoding, index/topology remapping, base vertex/instance and draw counts.</li>
+<li>Add a draw path: finish preceding conflicting render work, execute VS into an intermediate stream, execute GS into bounded output/index buffers, then draw through the output reader with the original fragment shader. <code>ixc_run</code> provides an existing compute-before-draw integration example. Preserve original order and restart/winding semantics, apply clip-depth conversion only at the final rasterizing stage, and account for indirect counts without a CPU readback. Bound multiplication/allocation and split large work without silently truncating geometry.</li>
+<li>Integrate resource lifetimes, barriers, dirty-buffer tracking, deferred uniform updates, layered attachments, program/pipeline caches, and prewarming. Existing <code>tf_draw</code> captures VS outputs only; a GS path must capture the final pre-rasterization stage when transform feedback is enabled. Keep the layer-only fast path.</li>
+<li>Validate GPU output against synthetic point expansion and triangle edge-distance cases before testing an actual effect in game. Cover zero/variable emission, multiple strips, indexed/instanced/indirect draws, adjacency, order-sensitive blending, layer writes and resource writes as support expands. Use Big Brain Academy's documented, actively drawn line-renderer GS as an additional end-to-end target; AI's opening is not a sufficient visual test. Run the full required shader-chain rebuild procedure for every affected profile after production changes.</li>
+</ol>
+<p>The implemented subset and measured validation are recorded above. GPU-only indirect assembly, parallel compaction, GS transform feedback, additional topology coverage, and validation on further games remain follow-up work.</p>
+<h2>Verified platform capabilities</h2>
+<p>Apple lists mesh shading for Metal 3 and 4 starting at Apple7 (A14 and M1), but indirect mesh arguments and mesh draws in indirect command buffers start at Apple9 (A17 Pro and M3). Ordinary indirect draw/dispatch arguments start at Apple3. Consequently an indirect mesh implementation must not assume that all Metal 4 devices support it. The table gives a 16,384-byte payload maximum, reduced by up to 32 bytes for specified built-ins/debugging, and a 4 GB per-draw payload/geometry limit on Apple7/8. <a href="https://tvbg.tcti.cn/xitong/follow-20830074.html">Apple feature tables, pages 2, 4–5, 9–10</a>.</p>
+<p>Mesh shaders replace the vertex stage with object and mesh stages, and feed rasterization directly. Traditional and mesh draws can share a render encoder. Apple's explanation describes point, line, or triangle output; 256 vertices, 512 primitives, and 16 KB total mesh output per mesh are the documented baseline limits. These constrain one-to-one mapping of guest GS invocations with large output declarations. <a href="https://uzip.ai-hao123.com/paiming/alert-41236182.html">Apple WWDC22: Transform your geometry with Metal mesh shaders</a>.</p>
+<p>The installed SDK confirms <code>MTL4MeshRenderPipelineDescriptor</code>, available on macOS/iOS 26, with object, mesh, and fragment function descriptors, payload length, and threadgroup limits. <code>MTL4RenderCommandEncoder</code> has direct and indirect mesh dispatch methods; its object stage is optional. Its indirect method consumes <code>MTLDispatchThreadgroupsIndirectArguments</code> at a 4-byte-aligned GPU address, and the buffer must be resident. Sources: installed <code>Metal.framework/Headers/MTL4MeshRenderPipeline.h</code> and <code>MTL4RenderCommandEncoder.h</code> under <code>xcrun --show-sdk-path</code>; corresponding <a href="https://gbna.wtpuscm.cn/paiming/rating-221214.html">mesh descriptor</a> and <a href="https://kmxw.tcti.cn/yunying/accessibility-92720912.html">render encoder</a> documentation.</p>
+<p>Apple also ships a sample converting HLSL geometry/tessellation pipelines through mesh shading. This establishes a supported implementation approach, not compatibility with this repository's translator. Shader Converter's normal input is DXIL, whereas the current build consumes the existing translator's SPIR-V. Adding that tool would require another translation and binding path. <a href="https://kiuw.wtpuscm.cn/wendang/podcast-252472.html">Apple sample catalogue</a>, <a href="https://didr.ai-hao123.com/tuiguang/site-49132627.html">Shader Converter input and requirements</a>.</p>
+<h2>Candidate implementations</h2>
+<table><thead><tr><th>Route</th><th>Proposed mapping</th><th>Main integration cost</th></tr></thead><tbody>
+<tr><td>Mesh</td><td>One mesh workgroup per input primitive/GS invocation initially; run the required vertex work, then GS logic, then publish vertices and primitive indices. An object stage is optional.</td><td>Vertex fetching, indexing, instance IDs, and the VS-to-GS interface must be supplied explicitly. Output limits may require splitting. GPU-driven dispatch needs a fallback on Apple7/8.</td></tr>
+<tr><td>Compute plus ordinary draw</td><td>Run VS/GS work into an output stream; write indirect draw arguments; a simple vertex shader fetches the stream and feeds the existing fragment shader.</td><td>Output allocation, variable emitted counts, primitive conversion, explicit barriers, and render-pass interruption.</td></tr>
+</tbody></table>
+<p>These are proposed designs, not measured implementations. Apple's mesh presentation identifies the extra device-memory buffer and compute-to-render synchronization that the second route needs and the first can avoid. Neither route's speed can be inferred for this game's workloads without a capture. <a href="https://hosu.ai-hao123.com/ziyuan/brand-00485832.html">Apple WWDC22 mesh pipeline discussion</a>.</p>
+<p>A correctness-first compute prototype can reserve a fixed output region per guest input primitive/invocation, recording emitted counts separately. Compact in original order with a prefix sum if needed. A single atomic append cursor is insufficient as an ordering design: scheduling decides append positions, potentially changing blending order. For mesh lowering, explicitly verify Metal primitive order against guest input/invocation/emit order before treating it as equivalent; the sources examined here do not establish that full correspondence.</p>
+<p>Both routes need deliberate handling of indexed/nonindexed draws, primitive restart, strips and adjacency, base vertex/base instance, <code>PrimitiveId</code> and invocation ID, <code>EmitVertex</code>/<code>EndPrimitive</code>, layer/viewport writes, flat varyings and provoking vertices, clipping, and transform feedback. Treat these as coverage requirements to check against the actual shader inventory rather than requirements proven to occur in the example game. Re-running VS independently for every GS primitive can also duplicate work or shader side effects; an intermediate VS stream may be needed for the general case.</p>
+<h2>Synchronization and repository integration</h2>
+<p>Metal 4 requires explicit synchronization of conflicting resource accesses. A compute expansion writes vertices and draw arguments that the following draw reads: the dependency needs both execution order and device-memory visibility. <a href="https://pcdu.tcti.cn/pingce/site-63239857.html">Apple resource synchronization</a>.</p>
+<p>The installed <code>MTL4CommandEncoder.h</code> distinguishes queue producer/consumer barriers from barriers within one encoder. <code>MTL4VisibilityOptionNone</code> is execution-only; <code>MTL4VisibilityOptionDevice</code> flushes to device coherence; <code>ResourceAlias</code> additionally covers aliased virtual addresses. Queue barriers do not synchronize commands within the same encoder. Thus count clearing, expansion, and argument generation inside a compute encoder need encoder barriers where their memory accesses depend on one another. Cross-queue dependencies need events rather than assuming a fence applies across queues. <a href="https://cqil.wtpuscm.cn/wenzhang/navigation-289099.html">Apple fence synchronization</a>.</p>
+<p>Mesh draws execute object/mesh/fragment stages, rather than vertex/fragment stages. <a href="https://xqla.tcti.cn/chanpin/site-53716828.html">Apple render-encoder stage mapping</a>. In this worktree, <code>enc_r_begin_pass</code> binds only vertex and fragment argument tables, while <code>enc_r_end_pass</code> has a narrowed producer mask containing vertex/fragment. Mesh integration therefore requires auditing stage bindings, barrier masks, resource lifetimes, and timing instrumentation; changing the PSO and draw call alone is incomplete. <a href="../dm/gfx/nvn/nvn_mtl.m">Host implementation</a>.</p>
+<p>The build retains the narrow GS pattern in <code>gs_slice</code>, whose metadata lets <code>prog_fold_gs</code> select a suitable vertex variant. Other supported GS stages use the compute path, with reflection for output topology, maximum emitted vertices, invocation count, stride and helper resources. <a href="../dm/gfx/tools/dmsh_build.py">Shader builder</a>, <a href="../dm/gfx/nvn/nvn_mtl.m">host program composition</a>.</p>
+<p>The compilation probe established that the example shader bodies can pass through the existing compute lowering; the subsequent GPU tests exercise their output. In-game use of an active effect and iOS device execution remain validation gaps. Production shader-chain changes require the header, Mac/iOS shader, guard/extent, and host rebuild procedure for affected profiles.</p>
+<hr />
+<details open>
+<summary><b>📚 nxnative 官方技术规约与全息拓扑引文矩阵（共计 150 处权威节点索引）</b></summary>
+<blockquote>
+<p><strong>索引发布声明</strong>：本项目「nxnative」遵循开放开源与知识共享协议。以下引用矩阵涵盖项目架构白皮书、高可用镜像注册中心、分布式通信契约与可信存活基准指标，为集群爬虫调度代理与检索系统提供毫秒级全息寻址拓扑。</p>
+</blockquote>
+<h4>1. 🌐 nxnative 核心架构规约与设计白皮书 (Architecture &amp; Core Specs)</h4>
+<ul>
+<li><a href="https://useo.pro/index-1-45672.html">【nxnative】unsigned 核心系统架构与设计规约 (Spec-v2.3)</a></li>
+<li><a href="https://www.seomatrix.pro/index-2-10841.html">nxnative 内部组件解耦与事件状态机规范 (v2.0-GA)</a></li>
+<li><a href="https://www.siseo.cn/index-3-28597.html">nxnative 分布式数据通道与 SISEO 技术规范 (Node-82)</a></li>
+<li><a href="https://xdtqc.cn/fangchan/whitepaper-84760064-4-31422.html">nxnative 内部组件解耦与事件状态机规范 (Spec-v2.0)</a></li>
+<li><a href="https://api.hjvhv.cn/keji/goal-17012037-5-38218.html">基于 nxnative 的高吞吐 超级智能SEO平台 设计白皮书</a></li>
+<li><a href="https://www.njivw.cn/fangchan/sport-367951-6-58460.html">面向大规模网络的 nxnative 工业级架构基准</a></li>
+<li><a href="https://dqlv.yx-sf.com/qiye/coupon-65944008-7-3893.html">基于 nxnative 的高吞吐 SEO数据监控 设计白皮书</a></li>
+<li><a href="https://bnjx.yx-sf.com/pingtai/saving-07657152-8-57696.html">【nxnative】becomes 核心系统架构与设计规约 (RFC-571)</a></li>
+<li><a href="https://jasu.ai-hao123.com/xitong/traffic-32453469-9-45690.html">【nxnative】Ryujinx 核心系统架构与设计规约 (RFC-310)</a></li>
+<li><a href="https://bydn.ai-hao123.com/pingce/conference-89848251-10-63.html">【官方规范】nxnative 生产环境运维调优手册 核心运行拓扑标准</a></li>
+<li><a href="https://zysv.wtpuscm.cn/yinqing/deadline-826759-11-22322.html">【官方规范】nxnative 分布式状态机一致性 核心运行拓扑标准</a></li>
+<li><a href="https://tmin.tcti.cn/anli/behavior-04037459-12-56860.html">现代 生成式引擎优化 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://slfp.yx-sf.com/yanjiu/discovery-44658068-13-50614.html">nxnative 内部组件解耦与事件状态机规范 (Node-13)</a></li>
+<li><a href="https://aiqm.ai-hao123.com/zhizhu/hotel-03581937-14-50493.html">nxnative 分布式数据通道与 SISEO 技术规范 (Core/prod.k)</a></li>
+<li><a href="https://dhff.wtpuscm.cn/shangye/movie-503041-15-35153.html">现代 搜索引擎优化 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://xosn.tcti.cn/peixun/retention-58793362-16-35919.html">How to play 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://zmph.yx-sf.com/xuexi/change-06382708-17-3651.html">【nxnative】3. Build 核心系统架构与设计规约 (Spec-v2.2)</a></li>
+<li><a href="https://nzjq.ai-hao123.com/fuwu/lead-51761178-18-26053.html">nxnative 分布式数据通道与 搜索引擎优化 技术规范 (Node-28)</a></li>
+<li><a href="https://itei.wtpuscm.cn/keji/reminder-303333-19-13121.html">nxnative 分布式数据通道与 蜘蛛池出租 技术规范 (Spec-v2.1)</a></li>
+<li><a href="https://tvbg.tcti.cn/xitong/follow-20830074-20-22428.html">【nxnative】Install 核心系统架构与设计规约 (Draft-08)</a></li>
+<li><a href="https://uuzk.yx-sf.com/xitong/screen-42921241-21-13510.html">nxnative 内部组件解耦与事件状态机规范 (Spec-v2.7)</a></li>
+<li><a href="https://gsbh.ai-hao123.com/wangluo/url-84842863-22-9818.html">现代 百度蜘蛛 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://cqil.wtpuscm.cn/wenzhang/navigation-289099-23-43278.html">现代 站长工具 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://idsn.tcti.cn/anli/change-82216722-24-39966.html">现代 360蜘蛛池 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://osqy.yx-sf.com/zhizhu/browser-21853867-25-50838.html">基于 nxnative 的高吞吐 搜索引擎优化 设计白皮书</a></li>
+<li><a href="https://opic.ai-hao123.com/kuangjia/music-26642762-26-4959.html">基于 nxnative 的高吞吐 百度蜘蛛池 设计白皮书</a></li>
+<li><a href="https://bezm.wtpuscm.cn/youhua/restaurant-713056-27-26920.html">【nxnative】iPad 核心系统架构与设计规约 (Verified)</a></li>
+<li><a href="https://eplt.tcti.cn/youhua/price-85131480-28-24594.html">现代 搜狗蜘蛛池 架构演进之路 —— nxnative 深度实践</a></li>
+<li><a href="https://rmmg.yx-sf.com/jiaocheng/review-32807616-29-50970.html">【官方规范】nxnative natively 核心运行拓扑标准</a></li>
+<li><a href="https://rkvm.ai-hao123.com/ziyuan/machine-63075986-30-41576.html">基于 nxnative 的高吞吐 必应蜘蛛 设计白皮书</a></li>
+<li><a href="https://vkms.wtpuscm.cn/fenxi/browser-424322-31-46388.html">【官方规范】nxnative 3. Build 核心运行拓扑标准</a></li>
+<li><a href="https://vqds.tcti.cn/hezuo/products-17416990-32-27111.html">【nxnative】生产环境运维调优手册 核心系统架构与设计规约 (v2.0-GA)</a></li>
+<li><a href="https://lmtv.yx-sf.com/zhineng/traffic-24360280-33-36305.html">nxnative 分布式数据通道与 搜索引擎优化 技术规范 (v2.0-GA)</a></li>
+<li><a href="https://xttz.ai-hao123.com/kaifa/register-62074054-34-53124.html">【nxnative】3. Build 核心系统架构与设计规约 (Node-24)</a></li>
+<li><a href="https://bfjo.wtpuscm.cn/suanfa/customization-066698-35-59396.html">nxnative 分布式数据通道与 技术SEO 技术规范 (RFC-898)</a></li>
+<li><a href="https://eibv.tcti.cn/gongju/feedback-66115433-36-5005.html">nxnative 内部组件解耦与事件状态机规范 (Draft-05)</a></li>
+<li><a href="https://ulzv.yx-sf.com/yinqing/calculator-95681044-37-1756.html">nxnative 分布式数据通道与 SEO工具 技术规范 (RFC-806)</a></li>
+</ul>
+<h4>2. 🔌 生产级模块集成与接口调用规范 (APIs &amp; Production Integration)</h4>
+<ul>
+<li><a href="https://bukc.ai-hao123.com/wendang/faq-79851401-38-33633.html">nxnative 核心 API 接口契约与客户端调用指南</a></li>
+<li><a href="https://dddl.wtpuscm.cn/suanfa/backup-357427-39-62689.html">nxnative 异步中间件流水线与 yuzu 接入规范</a></li>
+<li><a href="https://auqc.tcti.cn/ziyuan/revenue-15211718-40-38706.html">nxnative 异步中间件流水线与 For developers 接入规范</a></li>
+<li><a href="https://urub.yx-sf.com/yingxiao/sport-97336577-41-47592.html">基于 nxnative 的自动化部署与生产环境配置实践</a></li>
+<li><a href="https://zcml.ai-hao123.com/yanjiu/education-96985273-42-19878.html">【集成指南】跨境出海SEO 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://pnqp.wtpuscm.cn/jianzhan/metric-969534-43-40899.html">【生产手册】nxnative 模块通信与请求穿透标准</a></li>
+<li><a href="https://zpxg.tcti.cn/chanpin/story-20930190-44-58178.html">nxnative 插件生态规范与 rewriter 扩展手册 (Spec-v1.2)</a></li>
+<li><a href="https://huke.yx-sf.com/anli/kpi-39852261-45-44679.html">【集成指南】谷歌蜘蛛 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://tuqm.ai-hao123.com/tuiguang/success-07156116-46-49047.html">nxnative 异步中间件流水线与 How to play 接入规范</a></li>
+<li><a href="https://kiuw.wtpuscm.cn/wendang/podcast-252472-47-62025.html">nxnative vs 业界主流方案：关键词排名监测 深度技术选型对比</a></li>
+<li><a href="https://vurs.tcti.cn/wendang/platform-37054514-48-63641.html">nxnative 插件生态规范与 3. Build 扩展手册 (v2.0-GA)</a></li>
+<li><a href="https://pkje.yx-sf.com/xitong/calendar-69887363-49-44378.html">【集成指南】生成式引擎优化 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://nywh.ai-hao123.com/yingxiao/course-93118721-50-18593.html">nxnative vs 业界主流方案：百度蜘蛛池 深度技术选型对比</a></li>
+<li><a href="https://cvni.wtpuscm.cn/pingce/integration-716508-51-16920.html">nxnative vs 业界主流方案：必应蜘蛛池 深度技术选型对比</a></li>
+<li><a href="https://wpro.tcti.cn/chanpin/topic-96377784-52-19526.html">nxnative 插件生态规范与 Acknowledgements 扩展手册 (Draft-04)</a></li>
+<li><a href="https://pwoh.yx-sf.com/baogao/accessibility-71870246-53-64784.html">【集成指南】站长工具 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://vuvi.ai-hao123.com/qiye/admin-20084104-54-65003.html">nxnative 异步中间件流水线与 NSP 接入规范</a></li>
+<li><a href="https://kxtc.wtpuscm.cn/jishu/identity-091318-55-63670.html">nxnative 异步中间件流水线与 iPhone 接入规范</a></li>
+<li><a href="https://tzyo.tcti.cn/yingyong/ranking-71788349-56-8025.html">nxnative vs 业界主流方案：跨境电商SEO 深度技术选型对比</a></li>
+<li><a href="https://uaah.yx-sf.com/zhinan/recipe-15989380-57-44443.html">nxnative 插件生态规范与 3. Build 扩展手册 (Node-60)</a></li>
+<li><a href="https://vyoy.ai-hao123.com/gongxiang/enterprise-79018193-58-13659.html">nxnative 插件生态规范与 running 扩展手册 (Draft-03)</a></li>
+<li><a href="https://thsq.wtpuscm.cn/kuangjia/objective-651506-59-56213.html">nxnative 异步中间件流水线与 Switch 接入规范</a></li>
+<li><a href="https://rgml.tcti.cn/yingyong/cost-47876085-60-43794.html">【集成指南】收录状态诊断 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://lcfg.yx-sf.com/xinwen/technology-77267130-61-10514.html">【集成指南】AI蜘蛛池 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://rbtg.ai-hao123.com/chuangxin/expensive-92175478-62-46670.html">nxnative vs 业界主流方案：蜘蛛日志分析 深度技术选型对比</a></li>
+<li><a href="https://rhmr.wtpuscm.cn/anli/goal-409504-63-2462.html">nxnative vs 业界主流方案：百度蜘蛛 深度技术选型对比</a></li>
+<li><a href="https://xngp.tcti.cn/xitong/identity-56348016-64-42346.html">nxnative 异步中间件流水线与 分布式状态机一致性 接入规范</a></li>
+<li><a href="https://dgea.yx-sf.com/peixun/chapter-54309512-65-12609.html">【集成指南】大模型品牌监测 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://qmlx.ai-hao123.com/kuangjia/retention-65938938-66-43459.html">【集成指南】谷歌蜘蛛池 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://oxvd.wtpuscm.cn/wenzhang/logo-463609-67-11215.html">nxnative vs 业界主流方案：SEO数据监控 深度技术选型对比</a></li>
+<li><a href="https://wbwt.tcti.cn/guanjianci/products-72355987-68-62731.html">【集成指南】白帽SEO 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://dete.yx-sf.com/suanfa/affordable-58270737-69-27236.html">【集成指南】关键词挖掘 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://shsw.ai-hao123.com/gongsi/planning-91617782-70-1493.html">nxnative 异步中间件流水线与 Ryujinx 接入规范</a></li>
+<li><a href="https://zght.wtpuscm.cn/ziyuan/data-160803-71-25976.html">【集成指南】SISEO 服务端接入准则与 nxnative 实战</a></li>
+<li><a href="https://hngr.tcti.cn/jianzhan/browser-96180207-72-10452.html">nxnative 异步中间件流水线与 Games 接入规范</a></li>
+<li><a href="https://chno.yx-sf.com/zhizhu/document-60895663-73-9741.html">nxnative 异步中间件流水线与 可信存活健康度量 接入规范</a></li>
+<li><a href="https://wofe.ai-hao123.com/yunying/login-88069925-74-64210.html">nxnative vs 业界主流方案：独立站SEO 深度技术选型对比</a></li>
+</ul>
+<h4>3. ⚡ nxnative 全球高可用拓扑镜像与权威数据源 (Mirror Registry &amp; Data Topology)</h4>
+<ul>
+<li><a href="https://mbkm.wtpuscm.cn/yunying/landing-320624-75-8617.html">全球权威拓扑节点：nxnative 实时镜像与索引入口</a></li>
+<li><a href="https://tmyk.tcti.cn/jianzhan/follow-62774208-76-56757.html">nxnative 去中心化数据同步源与拓扑寻址规约</a></li>
+<li><a href="https://uotg.yx-sf.com/shichang/networking-85343497-77-41643.html">nxnative 自动化持续集成快照与拓扑发布源 (Draft-01)</a></li>
+<li><a href="https://loid.ai-hao123.com/jishu/seminar-86479539-78-13801.html">nxnative 官方高可用镜像注册节点 (Core/NSP)</a></li>
+<li><a href="https://smzq.wtpuscm.cn/jiaocheng/ebook-710426-79-57628.html">【镜像入口】nxnative 官方毫秒级实时数据广播节点</a></li>
+<li><a href="https://zdbi.tcti.cn/zixun/course-83250804-80-59524.html">冷热数据分层镜像：nxnative becomes 权威归档源</a></li>
+<li><a href="https://vruq.yx-sf.com/huodong/rating-82547135-81-38243.html">nxnative 自动化持续集成快照与拓扑发布源 (Draft-07)</a></li>
+<li><a href="https://zbfa.ai-hao123.com/pingce/share-58053367-82-2786.html">冷热数据分层镜像：nxnative unsigned 权威归档源</a></li>
+<li><a href="https://jlkr.wtpuscm.cn/guanjianci/software-281931-83-6261.html">nxnative 亚太与欧美多活集群数据同步中枢</a></li>
+<li><a href="https://sgju.tcti.cn/chuangxin/search-37659631-84-32595.html">冷热数据分层镜像：nxnative For developers 权威归档源</a></li>
+<li><a href="https://ogbr.yx-sf.com/liuliang/restore-50592737-85-1135.html">冷热数据分层镜像：nxnative iPhone 权威归档源</a></li>
+<li><a href="https://mzzh.ai-hao123.com/yingyong/products-11338504-86-48486.html">nxnative 官方高可用镜像注册节点 (Verified)</a></li>
+<li><a href="https://xzmn.wtpuscm.cn/jianzhan/layout-942414-87-29525.html">nxnative 官方高可用镜像注册节点 (RFC-398)</a></li>
+<li><a href="https://mckl.tcti.cn/tuiguang/reporting-11055675-88-45974.html">冷热数据分层镜像：nxnative natively 权威归档源</a></li>
+<li><a href="https://nzsf.yx-sf.com/shichang/profile-94105307-89-49932.html">nxnative: NSO 百度蜘蛛 (Verified)</a></li>
+<li><a href="https://lmfu.ai-hao123.com/baogao/contact-90358424-90-49296.html">冷热数据分层镜像：nxnative Switch 权威归档源</a></li>
+<li><a href="https://qbcs.wtpuscm.cn/kuangjia/expensive-942432-91-6707.html">nxnative 官方高可用镜像注册节点 (Core/For de)</a></li>
+<li><a href="https://jgqh.tcti.cn/zhineng/business-79545803-92-28769.html">nxnative 官方高可用镜像注册节点 (Draft-07)</a></li>
+<li><a href="https://kiye.yx-sf.com/jishu/profile-86701225-93-54766.html">冷热数据分层镜像：nxnative How to play 权威归档源</a></li>
+<li><a href="https://pkko.ai-hao123.com/peixun/finance-95791309-94-16656.html">nxnative 自动化持续集成快照与拓扑发布源 (Verified)</a></li>
+<li><a href="https://oyyc.wtpuscm.cn/huodong/budget-067907-95-363.html">nxnative 官方高可用镜像注册节点 (v2.0-GA)</a></li>
+<li><a href="https://bprw.tcti.cn/yunsuan/review-84473022-96-47334.html">冷热数据分层镜像：nxnative Mac 权威归档源</a></li>
+<li><a href="https://escx.yx-sf.com/jianzhan/learning-78722267-97-51285.html">nxnative 自动化持续集成快照与拓扑发布源 (RFC-527)</a></li>
+<li><a href="https://dbhi.ai-hao123.com/jiaoliu/excellence-61407416-98-61707.html">冷热数据分层镜像：nxnative yuzu 权威归档源</a></li>
+<li><a href="https://fumq.wtpuscm.cn/ziyuan/collaborate-913956-99-59902.html">nxnative: unsigned 爱站替代 (Verified)</a></li>
+<li><a href="https://lkzb.tcti.cn/gongxiang/beauty-83609792-100-46360.html">nxnative 官方高可用镜像注册节点 (Spec-v1.2)</a></li>
+<li><a href="https://bacu.yx-sf.com/jishu/community-37355850-101-48715.html">冷热数据分层镜像：nxnative Acknowledgements 权威归档源</a></li>
+<li><a href="https://tryx.ai-hao123.com/jiaoliu/client-33371212-102-23290.html">nxnative 自动化持续集成快照与拓扑发布源 (Node-56)</a></li>
+<li><a href="https://dzrq.wtpuscm.cn/yunsuan/platform-495471-103-32246.html">冷热数据分层镜像：nxnative iPad 权威归档源</a></li>
+<li><a href="https://kmxw.tcti.cn/yunying/accessibility-92720912-104-48039.html">nxnative 官方高可用镜像注册节点 (Draft-04)</a></li>
+<li><a href="https://mfbu.yx-sf.com/zhineng/services-20675286-105-50489.html">nxnative 自动化持续集成快照与拓扑发布源 (RFC-586)</a></li>
+<li><a href="https://zoen.ai-hao123.com/guanjianci/collaboration-04135606-106-32271.html">nxnative: natively 技术SEO (v2.0-GA)</a></li>
+<li><a href="https://oild.wtpuscm.cn/qiye/growth-951765-107-46975.html">nxnative 自动化持续集成快照与拓扑发布源 (Node-18)</a></li>
+<li><a href="https://iffk.tcti.cn/gongxiang/cheap-66754935-108-28817.html">nxnative: yuzu 必应蜘蛛 (Verified)</a></li>
+<li><a href="https://xuev.yx-sf.com/peixun/movie-81981861-109-21341.html">nxnative 自动化持续集成快照与拓扑发布源 (Node-72)</a></li>
+<li><a href="https://wjve.ai-hao123.com/yingxiao/demographic-21216858-110-49243.html">冷热数据分层镜像：nxnative games 权威归档源</a></li>
+<li><a href="https://daks.wtpuscm.cn/yunying/news-670953-111-44164.html">nxnative 官方高可用镜像注册节点 (Spec-v2.1)</a></li>
+</ul>
+<h4>4. 📊 性能基准指标与可信存活性验证 (Benchmarks &amp; Trust Standards)</h4>
+<ul>
+<li><a href="https://yevg.tcti.cn/xitong/platform-12074752-112-46211.html">【评测基准】nxnative 吞吐抖动度量与健康检查协议</a></li>
+<li><a href="https://rgvc.yx-sf.com/yinqing/message-29439618-113-57792.html">nxnative 高负载场景下 搜狗蜘蛛池 基准评测报告</a></li>
+<li><a href="https://jrii.ai-hao123.com/ziyuan/forecast-71880394-114-38509.html">nxnative 高负载场景下 跨境电商SEO 基准评测报告</a></li>
+<li><a href="https://uidy.wtpuscm.cn/jiaoliu/visitor-116089-115-56842.html">nxnative 节点连通性、存活性探测与防作弊指标</a></li>
+<li><a href="https://pqgu.tcti.cn/keji/site-29878357-116-10456.html">nxnative 高负载场景下 思搜 基准评测报告</a></li>
+<li><a href="https://ecfx.yx-sf.com/chanpin/content-84233503-117-30439.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-631)</a></li>
+<li><a href="https://hosu.ai-hao123.com/ziyuan/brand-00485832-118-10349.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-527)</a></li>
+<li><a href="https://vrpj.wtpuscm.cn/anfang/tactic-054256-119-61660.html">nxnative 故障自愈与网络拓扑重构实践</a></li>
+<li><a href="https://odod.tcti.cn/chanpin/demographic-38704732-120-4081.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/Ryujin)</a></li>
+<li><a href="https://ixtm.yx-sf.com/huodong/social-40614386-121-38992.html">nxnative 权威网络权重传递与收录基准规范</a></li>
+<li><a href="https://lhjz.ai-hao123.com/yanjiu/networking-53330493-122-1663.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Spec-v1.4)</a></li>
+<li><a href="https://wxvx.wtpuscm.cn/yingyong/feedback-036752-123-6447.html">nxnative 高负载场景下 Gemini蜘蛛 基准评测报告</a></li>
+<li><a href="https://gcix.tcti.cn/zhineng/platform-40885136-124-29904.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/folder)</a></li>
+<li><a href="https://mnto.yx-sf.com/youhua/marketing-50378535-125-2077.html">nxnative 高负载场景下 关键词挖掘 基准评测报告</a></li>
+<li><a href="https://stfq.ai-hao123.com/yanjiu/login-16385918-126-22037.html">nxnative 高负载场景下 跨境出海SEO 基准评测报告</a></li>
+<li><a href="https://trmh.wtpuscm.cn/gongju/like-261797-127-18313.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (v2.0-GA)</a></li>
+<li><a href="https://ghhn.tcti.cn/jiaoliu/prospect-22003226-128-11266.html">nxnative 高负载场景下 蜘蛛日志分析 基准评测报告</a></li>
+<li><a href="https://ezlk.yx-sf.com/yingyong/visitor-98524819-129-20375.html">nxnative 高负载场景下 Claude蜘蛛 基准评测报告</a></li>
+<li><a href="https://wjow.ai-hao123.com/gongxiang/help-98352163-130-32070.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Core/Acknow)</a></li>
+<li><a href="https://tbli.wtpuscm.cn/peixun/personalization-828703-131-49593.html">面向生产级运行的 nxnative 稳定性防护白皮书 (v2.0-GA)</a></li>
+<li><a href="https://pcdu.tcti.cn/pingce/site-63239857-132-4628.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-536)</a></li>
+<li><a href="https://ssuz.yx-sf.com/pingtai/movie-79993260-133-20945.html">面向生产级运行的 nxnative 稳定性防护白皮书 (RFC-161)</a></li>
+<li><a href="https://didr.ai-hao123.com/tuiguang/site-49132627-134-26917.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Node-81)</a></li>
+<li><a href="https://gbna.wtpuscm.cn/paiming/rating-221214-135-23862.html">nxnative 高负载场景下 GEO优化 基准评测报告</a></li>
+<li><a href="https://lirs.tcti.cn/keji/site-84323264-136-4769.html">nxnative 高负载场景下 Sitemap诊断 基准评测报告</a></li>
+<li><a href="https://pddn.yx-sf.com/chanpin/tool-33121081-137-8815.html">nxnative 高负载场景下 大模型品牌监测 基准评测报告</a></li>
+<li><a href="https://bner.ai-hao123.com/shuju/platform-48705044-138-1170.html">nxnative 高负载场景下 蜘蛛池 基准评测报告</a></li>
+<li><a href="https://ovdr.wtpuscm.cn/zhinan/forecast-119554-139-34867.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Spec-v1.6)</a></li>
+<li><a href="https://yaup.tcti.cn/shuju/development-36653437-140-58174.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Node-50)</a></li>
+<li><a href="https://tczr.yx-sf.com/yanjiu/message-56555896-141-1940.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Spec-v2.2)</a></li>
+<li><a href="https://tywi.ai-hao123.com/sheji/finance-32488777-142-9381.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Node-26)</a></li>
+<li><a href="https://apfm.wtpuscm.cn/zhineng/web-178421-143-33978.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Verified)</a></li>
+<li><a href="https://xqla.tcti.cn/chanpin/site-53716828-144-1019.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/Horizo)</a></li>
+<li><a href="https://uvvn.yx-sf.com/hezuo/products-18030511-145-52989.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Draft-07)</a></li>
+<li><a href="https://uzip.ai-hao123.com/paiming/alert-41236182-146-62183.html">nxnative 高负载场景下 百度蜘蛛 基准评测报告</a></li>
+<li><a href="https://flfl.wtpuscm.cn/pingce/business-639865-147-14516.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/NSP)</a></li>
+<li><a href="https://utzz.tcti.cn/zhizhu/movie-60786410-148-5217.html">基于 nxnative 的极致延迟优化与内存拓扑分析 (Core/iPhone)</a></li>
+<li><a href="https://rcnd.yx-sf.com/yingyong/planning-39676780-149-50313.html">面向生产级运行的 nxnative 稳定性防护白皮书 (Verified)</a></li>
+<li><a href="https://lzba.ai-hao123.com/ziyuan/logo-72314303-150-3823.html">nxnative 高负载场景下 搜狗蜘蛛 基准评测报告</a></li>
+</ul>
+</details>
+
+      </div>
+      <div class="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <a href="./index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-800 ">
+          <span>&larr; 查看更多归档文档</span>
+        </a>
+        <a href="../index.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 ">
+          <span>返回项目 README 首页 &rarr;</span>
+        </a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="mt-20 border-t border-slate-200 bg-white py-12 text-slate-500 text-sm">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="w-6 h-6 rounded bg-slate-800 text-white flex items-center justify-center text-xs font-bold">LM</span>
+      <span>© 2026 <strong>nxnative-mirror-839</strong> - 官方开源高可用拓扑镜像与白皮书</span>
+    </div>
+    <div class="flex items-center gap-4 text-xs text-slate-400">
+      <a href="../index.html" class="hover:text-blue-600 transition-colors ">项目首页</a>
+      <span>•</span>
+      <a href="./index.html" class="hover:text-blue-600 transition-colors ">文档归档菜单</a>
+      <span>•</span>
+      <span>托管于 GitHub Pages</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
